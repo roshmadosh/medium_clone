@@ -3,6 +3,7 @@ Another POC app that takes a poll of your favorite character from 'The Office,' 
 2. push notifications
 
 Stack: 
+<<<<<<< HEAD
 - **NextJS**
 - **urql** (client-side GQL)
 - **graphql-yoga** (serverside GQL)
