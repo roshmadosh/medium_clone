@@ -7,7 +7,6 @@ const WelcomeQuery = `
   }
 `
 
-
 const Home: NextPage = () => {
   const [result, reexecuteQuery] = useQuery({
     query: WelcomeQuery,

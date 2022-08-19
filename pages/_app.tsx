@@ -4,7 +4,7 @@ import Layout from '../layout';
 import Head from 'next/head';
 import { createClient, Provider } from 'urql';
 
-export const GQL_PATH = 'http://localhost:8000/graphql';
+export const GQL_PATH = '/api/graphql';
 
 const client = createClient({
   url: GQL_PATH,
