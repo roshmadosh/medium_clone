@@ -2,15 +2,16 @@ import type { NextPage } from 'next';
 import { useQuery } from 'urql';
 
 const WelcomeQuery = `
-  query ($name: String){ 
-    hello(name: $name)
+  query  { 
+    getUsers {
+      username
+      email
+    }
   }
 `
-
 const Home: NextPage = () => {
   const [result, reexecuteQuery] = useQuery({
     query: WelcomeQuery,
-    variables: { name: 'hiroshi' },
   });
 
   const { data, fetching, error } = result;
@@ -27,7 +28,12 @@ const Home: NextPage = () => {
   }
   return (
     <>
-      <h1>{data.hello}</h1>
+      {data.getUsers.map(user => (
+        <li key={user.username}>
+          <span>Username: {user.username}, </span>
+          <span>Email: {user.email}</span>
+        </li>
+      ))}
     </>
 
   )
