@@ -1,4 +1,3 @@
-import asyncio
 from fastapi.middleware.cors import CORSMiddleware
 import graphene as g
 from starlette.applications import Starlette
