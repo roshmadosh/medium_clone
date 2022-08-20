@@ -1,0 +1,4 @@
+@mixin btn-dimensions($width) {
+  width: $width;
+  height: $width * calc( 1 / 3);
+}

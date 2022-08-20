@@ -1,43 +1,36 @@
 import { PrismaClient, Prisma } from '@prisma/client'
 
 type Role = 'ADMIN' | 'USER';
-export type UserInput = {
-  email: string, 
-  username: string, 
-  password: string, 
-  role?: Role
-}
+
 const prisma = new PrismaClient();
 
 async function getUsers() {
   return await prisma.user.findMany()
-    .then((users) => {
-      return users;
-    }).catch((e) => {
+    .catch((e) => {
       console.error(e);
     }).finally(async () => {
       await prisma.$disconnect();
     })
 }
 
-async function createUser(input: UserInput) {
-  const { email, username, password, role } = input;
+async function createUser(email: string, username: string, password: string, role?: Role ) {
   let user: Prisma.UserCreateInput = {
     email,
     username,
     password, 
-    ...[role && {...{ role }}]
+    ...(role && {...{ role }})
     }
+
 
   // Pass 'user' object into query
   return await prisma.user.create({ data: user })
-    .then(async () => {
-      await prisma.$disconnect();
+    .then(result => {
+      return result
     })
     .catch(async (e) => {
       console.error(e);
+    }).finally(async () => {
       await prisma.$disconnect();
-      return null;
     })
 }
 

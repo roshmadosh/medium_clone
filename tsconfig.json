@@ -1,15 +1,15 @@
 {
   "compilerOptions": {
     "baseUrl": ".",
-    // "paths": {
-    //   "@api": ["pages/api"]
-    // },
+    "paths": {
+      // "@hooks": ["hooks"]
+    },
     "noImplicitAny": false,
     "target": "es5",
     "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "skipLibCheck": true,
-    "strict": true,
+    // "strict": true, <== this makes Partial types possibly undefined. This enabled will break prop types.
     "forceConsistentCasingInFileNames": true,
     "noEmit": true,
     "esModuleInterop": true,

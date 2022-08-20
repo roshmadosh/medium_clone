@@ -1,5 +1,4 @@
 import { userDAO } from "../data_access";
-import type { UserInput } from "../data_access/_User";
 
 // typeDefs declare what fields are exposed to GQL clients
 const typeDefs = `
@@ -30,6 +29,7 @@ const typeDefs = `
   }
 
   type User {
+    id: ID!
     email: String!
     username: String!
     posts: [Post!]!
@@ -51,13 +51,16 @@ const resolvers = {
   Query: {
     async getUsers() {
       const users = await userDAO.getUsers();
-      console.log('USERS', users);
       return users;
     }
   },
   Mutation: {
-    async createUser(parent, args: UserInput , context) {
-      return await userDAO.createUser(args);
+    async createUser(parent, args, context) {
+      const { email, username, password, role } = args.input;
+      if (role) {
+        return await userDAO.createUser(email, username, password, role);
+      }
+      return await userDAO.createUser(email, username, password);
     }
   }
 }

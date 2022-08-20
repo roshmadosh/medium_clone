@@ -2,3 +2,8 @@
   display: flex;
   justify-content: #{$justify}
 }
+
+@mixin flex-column {
+  display: flex;
+  flex-direction: column;
+}
