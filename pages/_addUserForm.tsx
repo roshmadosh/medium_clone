@@ -1,7 +1,7 @@
 import { useMutation } from "urql";
-import { useStatus } from "utls/customHooks/useStatus";
 import { HomePageType } from "pages";
 
+// mutations require you return a field. 
 const AddUser = `
   mutation ($input: UserInput!) {
     createUser(input: $input) {
@@ -11,25 +11,21 @@ const AddUser = `
 `
 
 export default function AddUserForm({ addUserForm, setAddUserForm }: HomePageType) {
+  // result has .data property that's undefined until addUser() is called. addUser() performs mutation.
   const [addUserResult, addUser] = useMutation(AddUser);
-  const [status, setStatus] = useStatus();
 
   const onSubmitForm = async (e) => {
     e.preventDefault();
-    const user = await addUser({ input: addUserForm })
+    await addUser({ input: addUserForm })
       .then(result => {
+        // Error can be result of faulty query or an error thrown by Prisma in DAO layer. Use addUserResult.error for rendered effects,
+        // only side-effects should go here.
         if (result.error) {
           console.error(result.error)
-          return;
-        } 
-        console.log('SUCCESS RESULT', result);
-        return result;
+        } else {
+          // result object contains GQL queried fields. Mutations usually won't require any returned fields.
+        };
       });
-    if (user) {
-      setStatus("success", "Successfully added user!");
-    } else {
-      setStatus("error", "Save unsuccessful.");
-    }
   }
 
   return (
@@ -51,8 +47,8 @@ export default function AddUserForm({ addUserForm, setAddUserForm }: HomePageTyp
         </select>
 
         <button className="btn-small" type="submit">Submit</button>
-        <div className={`notif ${status && status.type}`}>
-          <p>{status && status.message}</p>
+        <div className={`notif ${addUserResult.error ? 'error' : 'success'}`}>
+          {addUserResult.error ? <p>Save unsuccessful.</p> : <p>{addUserResult.data && 'User added successfully!'}</p>}
         </div>
       </div>   
     </fieldset>

@@ -2,7 +2,7 @@ import type { NextPage } from 'next';
 import AddUserForm from './_addUserForm';
 import { useState } from 'react';
 import { useQuery } from 'urql';
-import { StateSetters } from 'utls/types';
+import { StateSetters } from 'utils/types';
 
 const WelcomeQuery = `
   query  { 
@@ -27,10 +27,6 @@ const Home: NextPage = () => {
   const [result, reexecuteQuery] = useQuery({ query: WelcomeQuery, });
 
   const { data, fetching, error } = result;
-
-  const onSubmitForm = (e) => {
-    e.preventDefault();
-  }
 
   if (fetching) {
     return (

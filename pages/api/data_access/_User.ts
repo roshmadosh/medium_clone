@@ -6,11 +6,12 @@ const prisma = new PrismaClient();
 
 async function getUsers() {
   return await prisma.user.findMany()
-    .catch((e) => {
+    .catch(async (e) => {
       console.error(e);
-    }).finally(async () => {
-      await prisma.$disconnect();
     })
+    .finally(async () => {
+      await prisma.$disconnect();
+    })  
 }
 
 async function createUser(email: string, username: string, password: string, role?: Role ) {
@@ -24,12 +25,12 @@ async function createUser(email: string, username: string, password: string, rol
 
   // Pass 'user' object into query
   return await prisma.user.create({ data: user })
-    .then(result => {
-      return result
-    })
-    .catch(async (e) => {
+    .catch((e) => {
+      // log error on server side
       console.error(e);
-    }).finally(async () => {
+      // propogate error to GQL layer
+      throw new Error("USER-GENERATED: Prisma failed to complete transaction. Details available in server logs.");
+    }).finally(async() => {
       await prisma.$disconnect();
     })
 }

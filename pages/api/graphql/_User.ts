@@ -6,7 +6,7 @@ const typeDefs = `
     email: String!
     username: String!
     password: String!
-    role: String
+    role: String!
   }
 
   type Category {
@@ -57,10 +57,8 @@ const resolvers = {
   Mutation: {
     async createUser(parent, args, context) {
       const { email, username, password, role } = args.input;
-      if (role) {
-        return await userDAO.createUser(email, username, password, role);
-      }
-      return await userDAO.createUser(email, username, password);
+      // catching errors here won't make a difference. Error thrown from data-access layer will propogate to GQL client regardless.
+      return await userDAO.createUser(email, username, password, role);
     }
   }
 }
