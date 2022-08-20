@@ -1,7 +1,7 @@
 import { userDAO } from "../data_access";
 import type { UserInput } from "../data_access/_User";
 
-
+// typeDefs declare what fields are exposed to GQL clients
 const typeDefs = `
   input UserInput {
     email: String!
@@ -44,7 +44,9 @@ const typeDefs = `
     createUser(input: UserInput!): User
   }
 `
-
+// Resolvers can return 'superflous' data, as long as it contains all fields declared in the typedef of its return type (e.g.
+// getUsers returns an array of objects with properties for every field in the User typedef, as well as "unexposed" properties
+// like id and password).
 const resolvers = {
   Query: {
     async getUsers() {
