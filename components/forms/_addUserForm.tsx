@@ -1,6 +1,6 @@
 import { useMutation } from "urql";
 import { SignupPageType } from "pages/signup";
-import { Spinner } from "@components/loaders";
+import { Spinner } from "components/loaders";
 
 // mutations require you return a field. 
 const AddUser = `
