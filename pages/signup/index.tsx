@@ -1,5 +1,5 @@
 import type { NextPage } from 'next';
-import { AddUserForm } from '@components/forms';
+import { AddUserForm } from 'components/forms';
 import { useState } from 'react';
 import { StateSetters } from 'utils/types';
 
