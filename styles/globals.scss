@@ -35,7 +35,7 @@ header {
       @include mixins.flex('flex-end');
       > li {
         cursor: pointer;
-        padding: 1em 0;
+        margin: 1em 0 1em 3em;
       }
     }
   }
@@ -89,13 +89,21 @@ a {
   text-decoration: none;
 }
 
-button {
-  padding: 0.5em 1em;
-}
 .btn-small {
   @include mixins.btn-dimensions(10rem);
+  padding: 0.5em 1em;
 }
 
+
+.add-story-button {
+  background: colors.$white;
+  color: colors.$black;
+  font-size: 3.2rem;
+  height: 4rem;
+  width: 4rem;
+  text-align: center;
+  border-radius: 50%;
+}
 
 // @media (prefers-color-scheme: dark) {
 //   html {
