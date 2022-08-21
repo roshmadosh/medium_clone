@@ -1,6 +1,7 @@
 
 @use './variables/colors';
 @use './mixins';
+@use './spinner.scss';
 @import url('https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap');
 
 
@@ -93,7 +94,6 @@ button {
 .btn-small {
   @include mixins.btn-dimensions(10rem);
 }
-
 
 
 // @media (prefers-color-scheme: dark) {

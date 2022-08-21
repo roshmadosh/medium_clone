@@ -1,4 +1,5 @@
-import { PrismaClient, Prisma } from '@prisma/client'
+import { PrismaClient, Prisma } from '@prisma/client';
+import { hashGenerator } from 'utils/security/hashGenerator';
 
 type Role = 'ADMIN' | 'USER';
 
@@ -15,10 +16,11 @@ async function getUsers() {
 }
 
 async function createUser(email: string, username: string, password: string, role?: Role ) {
+  const hashedPassword = hashGenerator(password);
   let user: Prisma.UserCreateInput = {
     email,
     username,
-    password, 
+    password: hashedPassword, 
     ...(role && {...{ role }})
     }
 

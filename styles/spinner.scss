@@ -1,0 +1,44 @@
+.loader {
+  width: 3rem;
+  height: 3rem;
+}
+
+.spinner {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  animation: ring 2s linear infinite;
+}
+
+.spinner::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: inherit;
+  height: inherit;
+  border-radius: inherit;
+  box-shadow: 0 0 5px gray;
+}
+
+@keyframes ring {
+  0% {
+    transform: rotate(0deg);
+    box-shadow: 1px 5px 2px plum;
+  }
+  
+  33% {
+    transform: rotate(120deg);
+    box-shadow: 1px 5px 2px violet;
+  }
+  
+  66% {
+    transform: rotate(240deg);
+    box-shadow: 1px 5px 2px rebeccapurple;
+  }
+    
+  100% {
+    transform: rotate(360deg);
+    box-shadow: 1px 5px 2px plum;
+  }
+}

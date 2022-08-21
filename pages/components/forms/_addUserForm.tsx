@@ -1,5 +1,6 @@
 import { useMutation } from "urql";
 import { HomePageType } from "pages";
+import { Spinner } from "@components/loaders";
 
 // mutations require you return a field. 
 const AddUser = `
@@ -10,7 +11,7 @@ const AddUser = `
   }
 `
 
-export default function AddUserForm({ addUserForm, setAddUserForm }: HomePageType) {
+export function AddUserForm({ addUserForm, setAddUserForm }: HomePageType) {
   // result has .data property that's undefined until addUser() is called. addUser() performs mutation.
   const [addUserResult, addUser] = useMutation(AddUser);
 
@@ -45,8 +46,8 @@ export default function AddUserForm({ addUserForm, setAddUserForm }: HomePageTyp
           <option value="USER" onSelect={() => setAddUserForm({...addUserForm, role: "USER"})}>USER</option>
           <option value="ADMIN" onSelect={() => setAddUserForm({...addUserForm, role: "ADMIN"})}>ADMIN</option>
         </select>
-
-        <button className="btn-small" type="submit">Submit</button>
+        {addUserResult.fetching ? <Spinner /> : <button className="btn-small" type="submit">Submit</button>}
+        
         <div className={`notif ${addUserResult.error ? 'error' : 'success'}`}>
           {addUserResult.error ? <p>Save unsuccessful.</p> : <p>{addUserResult.data && 'User added successfully!'}</p>}
         </div>

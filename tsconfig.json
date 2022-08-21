@@ -2,7 +2,7 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      // "@hooks": ["hooks"]
+      "@components/*": ["pages/components/*"]
     },
     "noImplicitAny": false,
     "target": "es5",

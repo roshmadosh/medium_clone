@@ -1,17 +1,16 @@
 import type { NextPage } from 'next';
-import AddUserForm from './_addUserForm';
+import { AddUserForm } from './components/forms';
 import { useState } from 'react';
-import { useQuery } from 'urql';
 import { StateSetters } from 'utils/types';
 
-const WelcomeQuery = `
-  query  { 
-    getUsers {
-      username
-      email
-    }
-  }
-`
+// const WelcomeQuery = `
+//   query  { 
+//     getUsers {
+//       username
+//       email
+//     }
+//   }
+// `
 export type HomePageType = HomePageState & StateSetters<HomePageState>;
 type HomePageState = {
   addUserForm: {
@@ -24,32 +23,24 @@ type HomePageState = {
 
 const Home: NextPage = () => {
   const [addUserForm, setAddUserForm] = useState<HomePageState["addUserForm"]>({ email: '', username: '', password: '', role: 'USER' });
-  const [result, reexecuteQuery] = useQuery({ query: WelcomeQuery, });
+  // const [result, reexecuteQuery] = useQuery({ query: WelcomeQuery, });
 
-  const { data, fetching, error } = result;
+  // const { data, fetching, error } = result;
 
-  if (fetching) {
-    return (
-      <h1>Fetching...</h1>
-    )
-  }
-  if (error) {
-    console.log(error);
-    return (
-      <h1>Something went wrong...</h1>
-    )
-  }
+  // if (fetching) {
+  //   return (
+  //     <h1>Fetching...</h1>
+  //   )
+  // }
+  // if (error) {
+  //   console.log(error);
+  //   return (
+  //     <h1>Something went wrong...</h1>
+  //   )
+  // }
   return (
     <div className="page" id="home-page">
       <AddUserForm addUserForm={addUserForm} setAddUserForm={setAddUserForm}/>
-      <div id="users">
-        {data.getUsers.map(user => (
-          <li key={user.username}>
-            <span>Username: {user.username}, </span>
-            <span>Email: {user.email}</span>
-          </li>
-        ))}
-      </div>
     </div>
 
   )
