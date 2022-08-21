@@ -1,5 +1,5 @@
 import { useMutation } from "urql";
-import { HomePageType } from "pages";
+import { SignupPageType } from "pages/signup";
 import { Spinner } from "@components/loaders";
 
 // mutations require you return a field. 
@@ -11,7 +11,7 @@ const AddUser = `
   }
 `
 
-export function AddUserForm({ addUserForm, setAddUserForm }: HomePageType) {
+export function AddUserForm({ addUserForm, setAddUserForm }: SignupPageType) {
   // result has .data property that's undefined until addUser() is called. addUser() performs mutation.
   const [addUserResult, addUser] = useMutation(AddUser);
 

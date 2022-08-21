@@ -22,7 +22,7 @@ body {
 header {
   width: 100%;
   border-bottom: .2rem solid colors.$gray;
-  @include mixins.flex('inherit');
+  @include mixins.flex('space-between');
 
   > * { // all immediate children of header should have horizontal padding to match align with <main>
     padding: 0 1em;
@@ -31,7 +31,8 @@ header {
   > nav {
     width: 25%;
     > ul {
-      @include mixins.flex('space-between');
+      margin: auto;
+      @include mixins.flex('flex-end');
       > li {
         cursor: pointer;
         padding: 1em 0;
@@ -44,7 +45,7 @@ main {
   padding: 1em;
 }
 
-#home-page {
+#signup-page {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
   gap: 4em;
