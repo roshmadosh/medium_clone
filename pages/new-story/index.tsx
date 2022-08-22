@@ -29,14 +29,14 @@ const NewStory: NextPage = () => {
   return(
     <div className="text-editor">
       <TextEditorTitle contentArray={contentArray} setContentArray={setContentArray}/>
-      <div>
-        {contentArray.map((item, idx) => {
-          if (item.ele === 'subheader') return (<><br></br><h3 contentEditable>{item.content}</h3></>)
-          else if (item.ele === 'paragraph'){ 
-            return (<><br></br><TextEditorParagraph content={item.content} idx={idx}/></>)
-          }
-        })}
-    </div>
+
+      {contentArray.map((item, idx) => {
+        if (item.ele === 'subheader') return (<><br></br><h3 contentEditable>{item.content}</h3></>)
+        else if (item.ele === 'paragraph'){ 
+          return (<><br></br><TextEditorParagraph content={item.content} idx={idx}/></>)
+        }
+      })}
+
     </div>
   )
 }

@@ -18,13 +18,15 @@ const TextEditorTitle: React.FC<TextEditorProps> = ({contentArray, setContentArr
 
     // observes changes to innertext of #title. This is required bc onChange attribute for jsx does not work with contentEditable attr
     const observer = new MutationObserver(function(mutationsList, observer) {
-      const innerText = mutationsList[0].target.nodeValue;
+      const innerText = mutationsList[mutationsList.length - 1].target.nodeValue;
+
       // titleBlank handler, for adding/removing CSS visible class on placeholder
       if (innerText !== '') {
         if (titleBlank) { // only call this on initial
           setTitleBlank(false)
         }        
       } else { // only call this when no innerText
+        console.log('HIT');
         setTitleBlank(true);
       }
       setTitle(innerText);
