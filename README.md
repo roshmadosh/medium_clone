@@ -4,6 +4,8 @@
 
 **EDIT**: Making it a blog post app instead as it's a more trivial use-case for GraphQL. Users can comment on posts and reply to comments. May add push notifications feature.
 
+**EDIT**: Making it a Medium clone, trying to emulate their text editor.
+
 Stack: 
 - **NextJS**
 - **urql** (client-side GQL)

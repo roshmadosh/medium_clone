@@ -3,14 +3,7 @@ import { AddUserForm } from 'components/forms';
 import { useState } from 'react';
 import { StateSetters } from 'utils/types';
 
-// const WelcomeQuery = `
-//   query  { 
-//     getUsers {
-//       username
-//       email
-//     }
-//   }
-// `
+
 export type SignupPageType = SignupPageState & StateSetters<SignupPageState>;
 type SignupPageState = {
   addUserForm: {
