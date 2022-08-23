@@ -10,16 +10,15 @@ const TextEditorTitle: React.FC<TextEditorProps> = ({ updateContentArray }) => {
   const [title, setTitle] = useState('');
   const [titleBlank, setTitleBlank] = useState(true);
 
-
-  // putting the mutation observer inside a useEffect feels like an anti-pattern, but whatever
   useEffect(() => {
     const titleDOM = window.document.getElementById('title');
 
-    // observes changes to innertext of #title. This is required bc onChange attribute for jsx does not work with contentEditable attr
+    // observer needed to make title content stateful, i.e. onChange attribute doesn't work
+    // on contentEditable elements.
     const observer = new MutationObserver(function(mutationsList, observer) {
       const innerText = mutationsList[mutationsList.length - 1].target.nodeValue;
 
-      // titleBlank handler, for adding/removing CSS visible class on placeholder
+      // titleBlank handler for making placeholder (in)visible
       if (innerText !== '') {
         if (titleBlank) { // only call this on initial
           setTitleBlank(false)
@@ -37,12 +36,15 @@ const TextEditorTitle: React.FC<TextEditorProps> = ({ updateContentArray }) => {
     }
   }, [])
 
+  // imported keyDownHandler method prevents default when pressing enter key.
   const kdh = keyDownHandler.bind(null, (e) => keyDownCallback(e));
 
   function keyDownCallback(event) {
     if (event.key === 'Enter') {
+      // create a new <p> tag
       updateContentArray(false, [{ ele: 'paragraph', content: ''}])
-    } else {
+    } else { 
+      // update content of existing header tag.
       updateContentArray(true, [{ ele: 'title', content: title }])
     }
   }

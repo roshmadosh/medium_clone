@@ -11,7 +11,8 @@ const TextEditorParagraph: React.FC<TEParagraphProps> = ({ updateContentArray, i
   useEffect(() => {
     const paragraphDOM = document.getElementById(`p-${idx}`);
 
-    // observes changes to innertext. This is required bc onChange attribute for jsx does not work with contentEditable attr
+    // observer needed to make paragraph content stateful, i.e. onChange attribute doesn't work
+    // on contentEditable elements.
     const observer = new MutationObserver(function(mutationsList, observer) {
       // takes the last element in the array bc that's the one that holds the content. idk why
       const innerText = mutationsList[mutationsList.length - 1].target.nodeValue;
@@ -19,7 +20,8 @@ const TextEditorParagraph: React.FC<TEParagraphProps> = ({ updateContentArray, i
     });
 
     observer.observe(paragraphDOM, {characterData: true, subtree: true});
-    paragraphDOM.focus();
+    
+    paragraphDOM.focus(); // focuses on component mount
 
     return () => {
       observer.disconnect();
@@ -30,9 +32,12 @@ const TextEditorParagraph: React.FC<TEParagraphProps> = ({ updateContentArray, i
 
   function keyDownCallback(event) {
     if (event.key === 'Enter') {
+      // creates a new <p> tag
       updateContentArray(false, [{ ele: 'paragraph', content: ''}])
+    } else {
+      // updates current <p> tag content.
+      updateContentArray(true, [{ ele: 'paragraph', content: paragraph }]);
     }
-    updateContentArray(true, [{ ele: 'paragraph', content: paragraph }]);
   }
   
   return(

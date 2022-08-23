@@ -27,6 +27,9 @@ type NewStoryState = {
 // --[START]-- //
 const NewStory: NextPage = () => {
   const [contentArray, setContentArray] = useState<NewStoryState['contentArray']>([{ ele: 'title', content: '' }]);
+  
+  // Wrapper function to state-setter.
+  // Use bind method to create from it a new function that's specific to the use-case.
   const updateContentArray = (idx: number, update: boolean, contents: editorContent[]) => {
     if (update) {
       contentArray[idx] = contents[0]
