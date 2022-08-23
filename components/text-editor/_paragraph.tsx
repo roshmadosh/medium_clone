@@ -1,10 +1,11 @@
 import { useState, useEffect } from "react";
+import { keyDownHandler } from "utils/eventHandlers"
 import { NewStoryChildren } from "pages/new-story";
 
 
 type TEParagraphProps = NewStoryChildren['paragraph'];
 
-const TextEditorParagraph: React.FC<TEParagraphProps> = ({ appendContentArray, content, idx }) => {
+const TextEditorParagraph: React.FC<TEParagraphProps> = ({ updateContentArray, idx }) => {
   const [paragraph, setParagraph] = useState(''); // for recording paragraph content
 
   useEffect(() => {
@@ -24,10 +25,19 @@ const TextEditorParagraph: React.FC<TEParagraphProps> = ({ appendContentArray, c
       observer.disconnect();
     }
   }, [])
+
+  const kdh = keyDownHandler.bind(null, (e) => keyDownCallback(e));
+
+  function keyDownCallback(event) {
+    if (event.key === 'Enter') {
+      updateContentArray(false, [{ ele: 'paragraph', content: ''}])
+    }
+    updateContentArray(true, [{ ele: 'paragraph', content: paragraph }]);
+  }
   
   return(
     <div className="field">
-      <p className='content' id={`p-${idx}`} contentEditable>{content}</p>
+      <p className='content' id={`p-${idx}`} contentEditable onKeyDown={e => kdh(e)}></p>
     </div>
   )
 }

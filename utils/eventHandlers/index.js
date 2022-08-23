@@ -1,7 +1,6 @@
-module.exports.keyDownHandler = function(key, callback, event) {
-  if (event.key === key) {
+module.exports.keyDownHandler = function(callback, event) {
+  if (event.key === 'Enter') {
     event.preventDefault();
-
-    callback();
   }
+  callback(event);
 };

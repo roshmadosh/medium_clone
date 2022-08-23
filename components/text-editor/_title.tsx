@@ -1,12 +1,11 @@
 import { useEffect, useState } from "react";
 import { keyDownHandler } from "utils/eventHandlers"
-import { editorContent } from "pages/new-story";
 import { NewStoryChildren } from "pages/new-story";
 
 
 type TextEditorProps = NewStoryChildren['title'];
 
-const TextEditorTitle: React.FC<TextEditorProps> = ({ appendContentArray }) => {
+const TextEditorTitle: React.FC<TextEditorProps> = ({ updateContentArray }) => {
   //todo: make editor fields a custom hook with boolean "blank" state
   const [title, setTitle] = useState('');
   const [titleBlank, setTitleBlank] = useState(true);
@@ -38,23 +37,21 @@ const TextEditorTitle: React.FC<TextEditorProps> = ({ appendContentArray }) => {
     }
   }, [])
 
-  const kdh = keyDownHandler.bind(null, 'Enter', () => keyDownCallback({ ele: 'title', content: title }));
+  const kdh = keyDownHandler.bind(null, (e) => keyDownCallback(e));
 
-  function keyDownCallback(addedContent: editorContent) {
-    const emptyParagraph = {
-      ele: 'paragraph',
-      content: ''
-    } as const;
-    appendContentArray(emptyParagraph);
+  function keyDownCallback(event) {
+    if (event.key === 'Enter') {
+      updateContentArray(false, [{ ele: 'paragraph', content: ''}])
+    } else {
+      updateContentArray(true, [{ ele: 'title', content: title }])
+    }
   }
 
   return(
-
       <div className="field">
         <h1 className={`placeholder ${titleBlank ? 'visible': ''}`} id="title-placeholder">Write title here...</h1>
         <h1 className='content' contentEditable id="title" onKeyDown={e => kdh(e)}></h1>
       </div>
-
   )
 }
 

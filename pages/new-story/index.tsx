@@ -3,17 +3,17 @@ import { useState } from "react";
 import dynamic from "next/dynamic";
 import { StateSetters } from 'utils/types';
 
+
 export type editorContent = {
   ele: 'title' | 'subheader' | 'paragraph',
   content: string
 }
 export type NewStoryChildren = {
   title: {
-    appendContentArray: AppendContentArray;
+    updateContentArray: (update: boolean, contents: editorContent[]) => void;
   }
   paragraph: {
-    appendContentArray: AppendContentArray;
-    content: editorContent['content'],
+    updateContentArray: (update: boolean, contents: editorContent[]) => void;
     idx: number
   } & Partial<{ [property in keyof NewStoryType]: NewStoryType[property]; }>
 } 
@@ -24,19 +24,20 @@ type NewStoryState = {
   contentArray: editorContent[]
 }
 
-type AppendContentArray = (content: editorContent) => void;
-
 // --[START]-- //
 const NewStory: NextPage = () => {
-  const [contentArray, setContentArray] = useState<NewStoryState['contentArray']>([]);
-  const appendContentArray = (content: editorContent) => {
-    setContentArray([...contentArray, content]);
+  const [contentArray, setContentArray] = useState<NewStoryState['contentArray']>([{ ele: 'title', content: '' }]);
+  const updateContentArray = (idx: number, update: boolean, contents: editorContent[]) => {
+    if (update) {
+      contentArray[idx] = contents[0]
+    } else {
+      setContentArray([...contentArray, ...contents]);
+    }
   }
 
   return(
     <div className="text-editor">
-      <TextEditorTitle appendContentArray={appendContentArray}/>
-
+      <TextEditorTitle updateContentArray={updateContentArray.bind(null, 0)}/>
       {contentArray.map((item, idx) => {
         if (item.ele === 'subheader') return (<><br></br><h3 contentEditable>{item.content}</h3></>)
         else if (item.ele === 'paragraph'){ 
@@ -44,8 +45,7 @@ const NewStory: NextPage = () => {
             <>
               <br></br>
               <TextEditorParagraph
-                appendContentArray={appendContentArray} 
-                content={item.content} 
+                updateContentArray={updateContentArray.bind(null, idx)} 
                 idx={idx}
               />
             </>
