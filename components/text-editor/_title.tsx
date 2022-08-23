@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
 import { keyDownHandler } from "utils/eventHandlers"
 import { editorContent } from "pages/new-story";
-import { NewStoryType } from "pages/new-story";
+import { NewStoryChildren } from "pages/new-story";
 
 
-type TextEditorProps = NewStoryType;
+type TextEditorProps = NewStoryChildren['title'];
 
-const TextEditorTitle: React.FC<TextEditorProps> = ({contentArray, setContentArray}) => {
+const TextEditorTitle: React.FC<TextEditorProps> = ({ appendContentArray }) => {
   //todo: make editor fields a custom hook with boolean "blank" state
   const [title, setTitle] = useState('');
   const [titleBlank, setTitleBlank] = useState(true);
@@ -14,7 +14,7 @@ const TextEditorTitle: React.FC<TextEditorProps> = ({contentArray, setContentArr
 
   // putting the mutation observer inside a useEffect feels like an anti-pattern, but whatever
   useEffect(() => {
-    const title = window.document.getElementById('title');
+    const titleDOM = window.document.getElementById('title');
 
     // observes changes to innertext of #title. This is required bc onChange attribute for jsx does not work with contentEditable attr
     const observer = new MutationObserver(function(mutationsList, observer) {
@@ -26,30 +26,27 @@ const TextEditorTitle: React.FC<TextEditorProps> = ({contentArray, setContentArr
           setTitleBlank(false)
         }        
       } else { // only call this when no innerText
-        console.log('HIT');
         setTitleBlank(true);
       }
       setTitle(innerText);
     });
 
-    observer.observe(title, {characterData: true, subtree: true});
+    observer.observe(titleDOM, {characterData: true, subtree: true});
   
     return () => {
       observer.disconnect();
     }
   }, [])
 
+  const kdh = keyDownHandler.bind(null, 'Enter', () => keyDownCallback({ ele: 'title', content: title }));
+
   function keyDownCallback(addedContent: editorContent) {
     const emptyParagraph = {
       ele: 'paragraph',
       content: ''
     } as const;
-    setContentArray([...contentArray, emptyParagraph])
+    appendContentArray(emptyParagraph);
   }
-
-
-
-  const kdh = keyDownHandler.bind(null, 'Enter', () => keyDownCallback({ ele: 'title', content: title }));
 
   return(
 
