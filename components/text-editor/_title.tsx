@@ -7,14 +7,12 @@ type TextEditorProps = NewStoryChildren['title'];
 
 const TextEditorTitle: React.FC<TextEditorProps> = ({ updateContentArray }) => {
   //todo: make editor fields a custom hook with boolean "blank" state
-  const [title, setTitle] = useState('');
   const [titleBlank, setTitleBlank] = useState(true);
 
   useEffect(() => {
     const titleDOM = window.document.getElementById('title');
 
-    // observer needed to make title content stateful, i.e. onChange attribute doesn't work
-    // on contentEditable elements.
+    // observer for subscribing to changes to title, so that placeholder is visible at right times
     const observer = new MutationObserver(function(mutationsList, observer) {
       const innerText = mutationsList[mutationsList.length - 1].target.nodeValue;
 
@@ -26,7 +24,6 @@ const TextEditorTitle: React.FC<TextEditorProps> = ({ updateContentArray }) => {
       } else { // only call this when no innerText
         setTitleBlank(true);
       }
-      setTitle(innerText);
     });
 
     observer.observe(titleDOM, {characterData: true, subtree: true});
@@ -45,7 +42,7 @@ const TextEditorTitle: React.FC<TextEditorProps> = ({ updateContentArray }) => {
       updateContentArray(false, [{ ele: 'paragraph', content: ''}])
     } else { 
       // update content of existing header tag.
-      updateContentArray(true, [{ ele: 'title', content: title }])
+      updateContentArray(true, [{ ele: 'title', content: event.target.innerText + event.key }])
     }
   }
 

@@ -32,7 +32,8 @@ const NewStory: NextPage = () => {
   // Use bind method to create from it a new function that's specific to the use-case.
   const updateContentArray = (idx: number, update: boolean, contents: editorContent[]) => {
     if (update) {
-      contentArray[idx] = contents[0]
+      setContentArray([...contentArray.slice(0,idx), ...contents, ...contentArray.slice(idx+1)]);
+
     } else {
       setContentArray([...contentArray, ...contents]);
     }
@@ -40,9 +41,8 @@ const NewStory: NextPage = () => {
 
   return(
     <div className="text-editor">
-      <TextEditorTitle updateContentArray={updateContentArray.bind(null, 0)}/>
       {contentArray.map((item, idx) => {
-        if (item.ele === 'subheader') return (<><br></br><h3 contentEditable>{item.content}</h3></>)
+        if (item.ele === 'title') return <TextEditorTitle updateContentArray={updateContentArray.bind(null, 0)}/>
         else if (item.ele === 'paragraph'){ 
           return (
             <>
