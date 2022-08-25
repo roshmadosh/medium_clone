@@ -4,7 +4,6 @@ import dynamic from "next/dynamic";
 import { StateSetters } from 'utils/types';
 import uuid from 'react-uuid';
 
-
 export type editorContent = {
   id: string,
   ele: 'title' | 'subheader' | 'paragraph',
@@ -12,11 +11,11 @@ export type editorContent = {
 }
 export type NewStoryChildren = {
   title: {
-    updateContentArray: UpdateContentArray,
+    updateContentArray: (...args: UpdateContentArgs) => void,
   }
   paragraph: {
     index: number,
-    updateContentArray: UpdateContentArray,
+    updateContentArray: (...args: UpdateContentArgs) => void,
   } & Partial<{ [property in keyof NewStoryType]: NewStoryType[property]; }>
 } 
 
@@ -25,7 +24,8 @@ type NewStoryType = NewStoryState & StateSetters<NewStoryState>;
 type NewStoryState = {
   contentArray: editorContent[]
 }
-type UpdateContentArray = (update: boolean, contents: Omit<editorContent, "id">[]) => void
+
+type UpdateContentArgs = [update: boolean, contents: Omit<editorContent, "id">[]]
 
 
 // --[START]-- //
@@ -34,7 +34,8 @@ const NewStory: NextPage = () => {
   
   // Wrapper function to state-setter.
   // Use bind method to create from it a new function that's specific to the use-case.
-  const updateContentArray = (id: string, update: boolean, contents: Omit<editorContent, "id">[]) => {
+  const updateContentArray = (id: string, ...rest: UpdateContentArgs) => {
+    const [update, contents] = rest;
     const idx = contentArray.findIndex(item => item.id === id);
     const withId = contents.map(content => ({ id: update ? id : uuid(), ...content }));
 
