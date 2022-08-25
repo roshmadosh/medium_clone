@@ -1,14 +1,15 @@
 import { useState, useEffect } from "react";
 import { keyDownHandler } from "utils/eventHandlers"
 import { NewStoryChildren } from "pages/new-story";
+import uuid from "react-uuid";
 
 
 type TEParagraphProps = NewStoryChildren['paragraph'];
 
-const TextEditorParagraph: React.FC<TEParagraphProps> = ({ updateContentArray, idx }) => {
+const TextEditorParagraph: React.FC<TEParagraphProps> = ({ index, updateContentArray }) => {
 
   useEffect(() => {
-    const paragraphDOM = document.getElementById(`p-${idx}`);
+    const paragraphDOM = document.getElementById(`p-${index}`);
     
     paragraphDOM.focus(); // focuses on component mount
 
@@ -17,6 +18,9 @@ const TextEditorParagraph: React.FC<TEParagraphProps> = ({ updateContentArray, i
   const kdh = keyDownHandler.bind(null, (e) => keyDownCallback(e));
 
   function keyDownCallback(event) {
+    if (event.key === 'Shift' || /^Arrow/.test(event.key)) {
+      return;
+    }
     if (event.key === 'Enter') {
       // creates a new <p> tag
       updateContentArray(false, [{ ele: 'paragraph', content: ''}])
@@ -28,7 +32,8 @@ const TextEditorParagraph: React.FC<TEParagraphProps> = ({ updateContentArray, i
   
   return(
     <div className="field">
-      <p className='content' id={`p-${idx}`} contentEditable onKeyDown={e => kdh(e)}></p>
+      <h2>{index}</h2>
+      <p className='content' id={`p-${index}`} contentEditable onKeyDown={e => kdh(e)}></p>
     </div>
   )
 }

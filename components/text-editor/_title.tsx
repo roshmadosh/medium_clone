@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { keyDownHandler } from "utils/eventHandlers"
 import { NewStoryChildren } from "pages/new-story";
+import uuid from "react-uuid";
 
 
 type TextEditorProps = NewStoryChildren['title'];
