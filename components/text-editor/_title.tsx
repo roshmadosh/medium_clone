@@ -1,8 +1,6 @@
 import { useEffect, useState } from "react";
 import { keyDownHandler } from "utils/eventHandlers"
 import { NewStoryChildren } from "pages/new-story";
-import uuid from "react-uuid";
-
 
 type TextEditorProps = NewStoryChildren['title'];
 
@@ -16,7 +14,6 @@ const TextEditorTitle: React.FC<TextEditorProps> = ({ updateContentArray }) => {
     // observer for subscribing to changes to title, so that placeholder is visible at right times
     const observer = new MutationObserver(function(mutationsList, observer) {
       const innerText = mutationsList[mutationsList.length - 1].target.nodeValue;
-
       // titleBlank handler for making placeholder (in)visible
       if (innerText !== '') {
         if (titleBlank) { // only call this on initial
@@ -35,22 +32,22 @@ const TextEditorTitle: React.FC<TextEditorProps> = ({ updateContentArray }) => {
   }, [])
 
   // imported keyDownHandler method prevents default when pressing enter key.
-  const kdh = keyDownHandler.bind(null, (e) => keyDownCallback(e));
-
-  function keyDownCallback(event) {
+  const kuh = keyDownHandler.bind(null, (e) => keyUpCallback(e));
+  const kdh = keyDownHandler.bind(null, (e) => { console.log('newline prevented'); });
+  function keyUpCallback(event) {
     if (event.key === 'Enter') {
       // create a new <p> tag
       updateContentArray(false, [{ ele: 'paragraph', content: ''}])
     } else { 
       // update content of existing header tag.
-      updateContentArray(true, [{ ele: 'title', content: event.target.innerText + event.key }])
+      updateContentArray(true, [{ ele: 'title', content: event.target.innerText}])
     }
   }
 
   return(
       <div className="field">
         <h1 className={`placeholder ${titleBlank ? 'visible': ''}`} id="title-placeholder">Write title here...</h1>
-        <h1 className='content' contentEditable id="title" onKeyDown={e => kdh(e)}></h1>
+        <h1 className='content' contentEditable id="title" onKeyDown={e => kdh(e)} onKeyUp={e => kuh(e)}></h1>
       </div>
   )
 }

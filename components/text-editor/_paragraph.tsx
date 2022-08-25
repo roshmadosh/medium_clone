@@ -1,23 +1,23 @@
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { keyDownHandler } from "utils/eventHandlers"
 import { NewStoryChildren } from "pages/new-story";
-import uuid from "react-uuid";
 
 
 type TEParagraphProps = NewStoryChildren['paragraph'];
 
-const TextEditorParagraph: React.FC<TEParagraphProps> = ({ index, updateContentArray }) => {
+const TextEditorParagraph: React.FC<TEParagraphProps> = ({ index, updateContentArray, content, currentLine }) => {
 
   useEffect(() => {
     const paragraphDOM = document.getElementById(`p-${index}`);
-    
-    paragraphDOM.focus(); // focuses on component mount
-
+    paragraphDOM.innerText = content;
+    if (index === currentLine) {
+      paragraphDOM.focus(); // focuses on component mount
+    }
   }, [])
 
-  const kdh = keyDownHandler.bind(null, (e) => keyDownCallback(e));
-
-  function keyDownCallback(event) {
+  const kuh = keyDownHandler.bind(null, (e) => keyUpCallback(e));
+  const kdh = keyDownHandler.bind(null, (e) => { console.log('newline prevented'); });
+  function keyUpCallback(event) {
     if (event.key === 'Shift' || /^Arrow/.test(event.key)) {
       return;
     }
@@ -26,14 +26,14 @@ const TextEditorParagraph: React.FC<TEParagraphProps> = ({ index, updateContentA
       updateContentArray(false, [{ ele: 'paragraph', content: ''}])
     } else {
       // updates current <p> tag content.
-      updateContentArray(true, [{ ele: 'paragraph', content: event.target.innerText + event.key }]);
+      updateContentArray(true, [{ ele: 'paragraph', content: event.target.innerText}]);
     }
   }
   
   return(
     <div className="field">
       <h2>{index}</h2>
-      <p className='content' id={`p-${index}`} contentEditable onKeyDown={e => kdh(e)}></p>
+      <p className='content' id={`p-${index}`} contentEditable onKeyDown={e => kdh(e)} onKeyUp={e => kuh(e)}></p>
     </div>
   )
 }

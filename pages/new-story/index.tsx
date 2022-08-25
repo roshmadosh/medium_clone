@@ -15,6 +15,8 @@ export type NewStoryChildren = {
   }
   paragraph: {
     index: number,
+    content: string,
+    currentLine: number,
     updateContentArray: (...args: UpdateContentArgs) => void,
   } & Partial<{ [property in keyof NewStoryType]: NewStoryType[property]; }>
 } 
@@ -31,7 +33,7 @@ type UpdateContentArgs = [update: boolean, contents: Omit<editorContent, "id">[]
 // --[START]-- //
 const NewStory: NextPage = () => {
   const [contentArray, setContentArray] = useState<NewStoryState['contentArray']>([{ id: uuid(), ele: 'title', content: '' }]);
-  
+  const [currentLine, setCurrentLine] = useState(0);
   // Wrapper function to state-setter.
   // Use bind method to create from it a new function that's specific to the use-case.
   const updateContentArray = (id: string, ...rest: UpdateContentArgs) => {
@@ -41,18 +43,25 @@ const NewStory: NextPage = () => {
 
     // either update at index or add from index, depending on update param
     setContentArray([...contentArray.slice(0, update ? idx : idx + 1), ...withId, ...contentArray.slice(idx+1)]);
+    if (!update) {
+      setCurrentLine(idx+1);
+    }
   }
 
   return(
     <div className="text-editor">
       {contentArray.map((item, index) => {
-        if (item.ele === 'title') return <TextEditorTitle key={item.id} updateContentArray={updateContentArray.bind(null, item.id)}/>
+        if (item.ele === 'title') {
+          return <TextEditorTitle key={item.id} updateContentArray={updateContentArray.bind(null, item.id)}/>
+        }
         else if (item.ele === 'paragraph') { 
           return (
             <>
               <br></br>
               <TextEditorParagraph
                 index={index}
+                content={item.content}
+                currentLine={currentLine}
                 key={item.id}
                 updateContentArray={updateContentArray.bind(null, item.id)} 
               />
