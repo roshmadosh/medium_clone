@@ -89,6 +89,10 @@ a {
   text-decoration: none;
 }
 
+pre {
+  display: inline;
+  font-family: 'Libre Baskerville', serif;
+}
 .btn-small {
   @include mixins.btn-dimensions(10rem);
   padding: 0.5em 1em;
@@ -120,7 +124,7 @@ a {
     > .content {
       outline: none;
 
-      padding-left: 1rem; // won't display cursor when blank otherwise
+      padding: 0 1rem; // won't display cursor when blank otherwise
     }
   }
   .visible {

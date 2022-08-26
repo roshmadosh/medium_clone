@@ -58,6 +58,7 @@ const NewStory: NextPage = () => {
           return (
             <>
               <br></br>
+              {/* TODO too many props here. Try to make it fewer */}
               <TextEditorParagraph
                 index={index}
                 content={item.content}
@@ -69,7 +70,6 @@ const NewStory: NextPage = () => {
           )
         }
       })}
-
     </div>
   )
 }

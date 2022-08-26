@@ -31,9 +31,11 @@ const TextEditorTitle: React.FC<TextEditorProps> = ({ updateContentArray }) => {
     }
   }, [])
 
-  // imported keyDownHandler method prevents default when pressing enter key.
+  // imported keyDownHandler method prevents default when pressing certain keys.
   const kuh = keyDownHandler.bind(null, (e) => keyUpCallback(e));
-  const kdh = keyDownHandler.bind(null, (e) => { console.log('newline prevented'); });
+  // empty callback, just need to prevent default behavior of keypress
+  const kdh = keyDownHandler.bind(null, (e) => {});
+  
   function keyUpCallback(event) {
     if (event.key === 'Enter') {
       // create a new <p> tag
