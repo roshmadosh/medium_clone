@@ -12,7 +12,7 @@ const TextEditorParagraph: React.FC<TEParagraphProps> = ({ index, updateContentA
 
     // component doesn't remember innerText when it remounts, have to pass it as a stateful prop and assign
     // here.
-    paragraphDOM.innerHTML = content;
+    paragraphDOM.innerText = content;
     if (index === currentLine) {
       paragraphDOM.focus(); // focuses on component mount
     }
@@ -26,32 +26,53 @@ const TextEditorParagraph: React.FC<TEParagraphProps> = ({ index, updateContentA
   
   // TODO might want to make this a switch-case
   function keyUpCallback(event) {
-    if (event.key === 'Tab') {
-      // need this in case someone tabs on a multi-char selection
-      const { anchorOffset, focusOffset } = window.getSelection();
-      console.log(anchorOffset, focusOffset);
+    switch(event.key) {
+      case 'Tab': {
+        // need this in case someone tabs on a multi-char selection
+        const selection = window.getSelection();
+        const node = selection.focusNode;
 
-      // if selection a single space, just add TABSPACE
-      if (anchorOffset == focusOffset) {
-        const paragraphDOM = document.getElementById(`p-${index}`);
-        const TABSPACE = '    ';
-        // state-setter for persisting content onChange
-        updateContentArray(true, [{ ele: 'paragraph', content: event.target.innerHTML + TABSPACE }]);
+        // if selection is mulitchar, delete selection first.
+        if (selection.toString()) {
+          selection.deleteFromDocument();
+        }
+        
+        // this is inserted where tab was pressed
+        const TABSPACE = "<pre contenteditable=\"false\">    </pre>";
+        // this is a placeholder
+        const SECRET_TAB_HOLDER = 'qwelkfSvjh23fadfqef';
+
+        const offset = selection.focusOffset;
+        // insert the placeholder inside relevant node (textcontent gets split into nodes when it contains HTML, such as our TABSPACE element) 
+        node.textContent = node.textContent.slice(0, offset) 
+          + SECRET_TAB_HOLDER + node.textContent.slice(offset, node.textContent.length);
+  
+        // this is done to sniff out all the previously-entered tabspaces that wouldn't show in innertext 
+        event.target.innerHTML = event.target.innerHTML.replaceAll(TABSPACE, SECRET_TAB_HOLDER);
+        
+        // all the placeholders replaced with stringifyed TABSPACE. This may look silly but is necessary bc innerHTML can't be sliced.
+        const content = event.target.innerText.replaceAll(SECRET_TAB_HOLDER, TABSPACE);
+
+        // state-setter for persistance purposes
+        updateContentArray(true, [{ ele: 'paragraph', content }]);
+
         // to see changes on DOM
-        event.target.innerHTML += TABSPACE;
-        // move cursor to end of content
-        window.getSelection().setPosition(paragraphDOM, paragraphDOM.childNodes.length);
+        event.target.innerHTML = content;
+     
+        // TODO move cursor to end of content
+
+        break;
       }
-    }
-    if (event.key === 'Shift' || /^Arrow/.test(event.key)) {
-      return;
-    }
-    if (event.key === 'Enter') {
-      // creates a new <p> tag
-      updateContentArray(false, [{ ele: 'paragraph', content: ''}])
-    } else {
-      // updates current <p> tag content.
-      updateContentArray(true, [{ ele: 'paragraph', content: event.target.innerHTML}]);
+      case 'Enter': {
+        updateContentArray(false, [{ ele: 'paragraph', content: ''}]);
+        break;
+      }
+      case 'Shift': {
+        return;
+      }
+      default: { // for all other keys
+        updateContentArray(true, [{ ele: 'paragraph', content: event.target.innerText}]); 
+      }
     }
   }
 
@@ -62,7 +83,7 @@ const TextEditorParagraph: React.FC<TEParagraphProps> = ({ index, updateContentA
   return(
     <div className="field">
       <h2>{index}</h2>
-      <pre className='content' id={`p-${index}`} contentEditable onKeyDown={e => kdh(e)} onKeyUp={e => kuh(e)}></pre>
+      <p className='content' id={`p-${index}`} contentEditable onKeyDown={e => kdh(e)} onKeyUp={e => kuh(e)}></p>
     </div>
   )
 }
