@@ -7,7 +7,8 @@ import uuid from 'react-uuid';
 export type editorContent = {
   id: string,
   ele: 'title' | 'subheader' | 'paragraph',
-  content: string
+  content: string,
+  tabCount?: number
 }
 export type NewStoryChildren = {
   title: {
@@ -17,6 +18,7 @@ export type NewStoryChildren = {
     index: number,
     content: string,
     currentLine: number,
+    tabCount: number,
     updateContentArray: (...args: UpdateContentArgs) => void,
   } & Partial<{ [property in keyof NewStoryType]: NewStoryType[property]; }>
 } 
@@ -64,6 +66,7 @@ const NewStory: NextPage = () => {
                 content={item.content}
                 currentLine={currentLine}
                 key={item.id}
+                tabCount={item.tabCount}
                 updateContentArray={updateContentArray.bind(null, item.id)} 
               />
             </>

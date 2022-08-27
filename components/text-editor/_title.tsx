@@ -39,7 +39,7 @@ const TextEditorTitle: React.FC<TextEditorProps> = ({ updateContentArray }) => {
   function keyUpCallback(event) {
     if (event.key === 'Enter') {
       // create a new <p> tag
-      updateContentArray(false, [{ ele: 'paragraph', content: ''}])
+      updateContentArray(false, [{ ele: 'paragraph', content: '', tabCount: 0 }])
     } else { 
       // update content of existing header tag.
       updateContentArray(true, [{ ele: 'title', content: event.target.innerText}])
