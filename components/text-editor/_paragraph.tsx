@@ -31,6 +31,11 @@ const TextEditorParagraph: React.FC<TEParagraphProps> = ({ index, updateContentA
       case 'Tab': {
         const selection = window.getSelection();
         let node = selection.focusNode;
+        console.log('P last child', paragraphDOM.childNodes);
+        console.log('NODE VALUE:', node)
+        if (node.nodeType !== 3) {
+          
+        }
         // if selection is mulitchar, delete selection first.
         if (selection.toString()) {
           selection.deleteFromDocument();
@@ -44,8 +49,8 @@ const TextEditorParagraph: React.FC<TEParagraphProps> = ({ index, updateContentA
         // this is a placeholder. made ambiguous to prevent replacing user input
         const SECRET_TAB_HOLDER = `SUPERSERCRETKEY`;
        
-
         const offset = selection.focusOffset;
+        console.log('OFFSET', offset);
         // insert the placeholder inside relevant node (textcontent gets split into nodes when it contains HTML, such as our TABSPACE element) 
         node.textContent = node.textContent.slice(0, offset) 
           + SECRET_TAB_HOLDER.concat(`-${tabCount}`) + node.textContent.slice(offset, node.textContent.length);
@@ -59,7 +64,7 @@ const TextEditorParagraph: React.FC<TEParagraphProps> = ({ index, updateContentA
       // all the placeholders replaced with stringifyed TABSPACE. This may look silly but is necessary bc innerHTML can't be sliced.
         for (let j=1; j <= tabCount; j++) {
           const lookupString = 
-            `<pre id=\"pre-${j}\" contenteditable=\"false\">    </pre><span class=\"cursor\"></span>`;
+            `<pre id=\"pre-${j}\" contenteditable=\"false\">    </pre>`;
           event.target.innerHTML = event.target.innerHTML.replace(SECRET_TAB_HOLDER.concat(`-${j}`), lookupString);
         }
 
@@ -68,18 +73,21 @@ const TextEditorParagraph: React.FC<TEParagraphProps> = ({ index, updateContentA
         // state-setter for persistance purposes
         updateContentArray(true, [{ ele: 'paragraph', content, tabCount }]);
 
-        // to see changes on DOM
-        // event.target.innerHTML = content;
-     
         // TODO move cursor to end of content
         var range = document.createRange();
         var sel = window.getSelection();
-        
+                
+        if (Array.from(paragraphDOM.childNodes).pop().nodeType !== 3) {
+          console.log('HIT');
+          paragraphDOM.innerHTML += '&#8203';
+        } 
 
         node = paragraphDOM.querySelector(`#pre-${tabCount}`);
-        console.log(node);
         range.setStartAfter(node);
         range.setEndAfter(node);
+
+        console.log('NODE', node);
+
         range.collapse(false);
         
         sel.removeAllRanges()
