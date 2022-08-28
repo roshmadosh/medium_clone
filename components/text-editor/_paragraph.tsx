@@ -31,26 +31,18 @@ const TextEditorParagraph: React.FC<TEParagraphProps> = ({ index, updateContentA
       case 'Tab': {
         const selection = window.getSelection();
         let node = selection.focusNode;
-        console.log('P last child', paragraphDOM.childNodes);
-        console.log('NODE VALUE:', node)
-        if (node.nodeType !== 3) {
-          
-        }
-        // if selection is mulitchar, delete selection first.
+        // **Not allowing tab if selection is multichar. Introduces new bugs that are difficult to resolve.
         if (selection.toString()) {
-          selection.deleteFromDocument();
+          return;
         }
      
         // count the existing tag elements, and include current tag being added
         tabCount = Array.from(paragraphDOM.innerHTML.matchAll(/<pre/g)).length + 1;
-        
-        // this is inserted where tab was pressed
-        const TABSPACE = `<pre class=\"tab-space\" id=\"pre-${tabCount}\" contenteditable=\"false\">    </pre>`;
+  
         // this is a placeholder. made ambiguous to prevent replacing user input
         const SECRET_TAB_HOLDER = `SUPERSERCRETKEY`;
        
         const offset = selection.focusOffset;
-        console.log('OFFSET', offset);
         // insert the placeholder inside relevant node (textcontent gets split into nodes when it contains HTML, such as our TABSPACE element) 
         node.textContent = node.textContent.slice(0, offset) 
           + SECRET_TAB_HOLDER.concat(`-${tabCount}`) + node.textContent.slice(offset, node.textContent.length);
@@ -76,9 +68,9 @@ const TextEditorParagraph: React.FC<TEParagraphProps> = ({ index, updateContentA
         // TODO move cursor to end of content
         var range = document.createRange();
         var sel = window.getSelection();
-                
+        
+        // if tab is added to end of content, add an empty zero-width character so that cursor shows after tab.
         if (Array.from(paragraphDOM.childNodes).pop().nodeType !== 3) {
-          console.log('HIT');
           paragraphDOM.innerHTML += '&#8203';
         } 
 
