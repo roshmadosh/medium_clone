@@ -42,24 +42,25 @@ const TextEditorParagraph: React.FC<TEParagraphProps> = ({ index, updateContentA
         // this is inserted where tab was pressed
         const TABSPACE = `<pre class=\"tab-space\" id=\"pre-${tabCount}\" contenteditable=\"false\">    </pre>`;
         // this is a placeholder. made ambiguous to prevent replacing user input
-        const SECRET_TAB_HOLDER = 'qwelkfSvjh23fadfqef';
+        const SECRET_TAB_HOLDER = `SUPERSERCRETKEY`;
        
 
         const offset = selection.focusOffset;
         // insert the placeholder inside relevant node (textcontent gets split into nodes when it contains HTML, such as our TABSPACE element) 
         node.textContent = node.textContent.slice(0, offset) 
-          + SECRET_TAB_HOLDER + node.textContent.slice(offset, node.textContent.length);
+          + SECRET_TAB_HOLDER.concat(`-${tabCount}`) + node.textContent.slice(offset, node.textContent.length);
   
          // this is done to sniff out all the previously-entered tabspaces that wouldn't show in innertext 
-        for (let i=0 ; i < tabCount; i++) {
-          const lookupString = `<pre id=\"pre-${i + 1}\" contenteditable=\"false\">    </pre>`;
-          event.target.innerHTML = event.target.innerHTML.replace(lookupString, SECRET_TAB_HOLDER);
+        for (let i=1 ; i <= tabCount; i++) {
+          const lookupString = `<pre id=\"pre-${i}\" contenteditable=\"false\">    </pre>`;
+          event.target.innerHTML = event.target.innerHTML.replace(lookupString, SECRET_TAB_HOLDER.concat(`-${i}`));
         }
        
       // all the placeholders replaced with stringifyed TABSPACE. This may look silly but is necessary bc innerHTML can't be sliced.
-        for (let j=0; j < tabCount; j++) {
-          const lookupString = `<pre id=\"pre-${j + 1}\" contenteditable=\"false\">    </pre>`;
-          event.target.innerHTML = event.target.innerHTML.replace(SECRET_TAB_HOLDER, lookupString);
+        for (let j=1; j <= tabCount; j++) {
+          const lookupString = 
+            `<pre id=\"pre-${j}\" contenteditable=\"false\">    </pre><span class=\"cursor\"></span>`;
+          event.target.innerHTML = event.target.innerHTML.replace(SECRET_TAB_HOLDER.concat(`-${j}`), lookupString);
         }
 
         const content = event.target.innerHTML;
@@ -79,10 +80,11 @@ const TextEditorParagraph: React.FC<TEParagraphProps> = ({ index, updateContentA
         console.log(node);
         range.setStartAfter(node);
         range.setEndAfter(node);
+        range.collapse(false);
         
         sel.removeAllRanges()
         sel.addRange(range)
-        tabCount++;
+
         break;
       }
       case 'Enter': {
