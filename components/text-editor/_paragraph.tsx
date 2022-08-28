@@ -29,20 +29,19 @@ const TextEditorParagraph: React.FC<TEParagraphProps> = ({ index, updateContentA
     const paragraphDOM = document.getElementById(`p-${index}`);
     switch(event.key) {
       case 'Tab': {
-        const prevTabCount = tabCount;
-        tabCount++;
-        // need this in case someone tabs on a multi-char selection
         const selection = window.getSelection();
         let node = selection.focusNode;
-
         // if selection is mulitchar, delete selection first.
         if (selection.toString()) {
           selection.deleteFromDocument();
         }
+     
+        // count the existing tag elements, and include current tag being added
+        tabCount = Array.from(paragraphDOM.innerHTML.matchAll(/<pre/g)).length + 1;
         
         // this is inserted where tab was pressed
-        const TABSPACE = `<pre id=\"pre-${tabCount}\" contenteditable=\"false\">    </pre>`;
-        // this is a placeholder
+        const TABSPACE = `<pre class=\"tab-space\" id=\"pre-${tabCount}\" contenteditable=\"false\">    </pre>`;
+        // this is a placeholder. made ambiguous to prevent replacing user input
         const SECRET_TAB_HOLDER = 'qwelkfSvjh23fadfqef';
        
 
@@ -53,13 +52,13 @@ const TextEditorParagraph: React.FC<TEParagraphProps> = ({ index, updateContentA
   
          // this is done to sniff out all the previously-entered tabspaces that wouldn't show in innertext 
         for (let i=0 ; i < tabCount; i++) {
-          const lookupString = `<pre id=\"pre-${i}\" contenteditable=\"false\">    </pre>`;
+          const lookupString = `<pre id=\"pre-${i + 1}\" contenteditable=\"false\">    </pre>`;
           event.target.innerHTML = event.target.innerHTML.replace(lookupString, SECRET_TAB_HOLDER);
         }
        
       // all the placeholders replaced with stringifyed TABSPACE. This may look silly but is necessary bc innerHTML can't be sliced.
         for (let j=0; j < tabCount; j++) {
-          const lookupString = `<pre id=\"pre-${j}\" contenteditable=\"false\">    </pre>`;
+          const lookupString = `<pre id=\"pre-${j + 1}\" contenteditable=\"false\">    </pre>`;
           event.target.innerHTML = event.target.innerHTML.replace(SECRET_TAB_HOLDER, lookupString);
         }
 
@@ -76,7 +75,7 @@ const TextEditorParagraph: React.FC<TEParagraphProps> = ({ index, updateContentA
         var sel = window.getSelection();
         
 
-        node = paragraphDOM.querySelector(`#pre-${prevTabCount}`);
+        node = paragraphDOM.querySelector(`#pre-${tabCount}`);
         console.log(node);
         range.setStartAfter(node);
         range.setEndAfter(node);
