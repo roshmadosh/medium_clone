@@ -39,47 +39,40 @@ const TextEditorParagraph: React.FC<TEParagraphProps> = ({ index, updateContentA
         // count the existing tag elements, and include current tag being added
         tabCount = Array.from(paragraphDOM.innerHTML.matchAll(/<pre/g)).length + 1;
   
+        // to distinguish current tabspace from previous ones
+        const TABSPACE = `<pre id=\"current-tabspace\" contenteditable=\"false\">    </pre>`;
+        // previous tabspaces
+        const DEFAULT_TABSPACE = `<pre contenteditable=\"false\">    </pre>`;
         // this is a placeholder. made ambiguous to prevent replacing user input
-        const SECRET_TAB_HOLDER = `SUPERSERCRETKEY`;
-       
+        const CURRENT_TAB_PLACEHOLDER = `SUPERSERCRETKEY`;
         const offset = selection.focusOffset;
+
         // insert the placeholder inside relevant node (textcontent gets split into nodes when it contains HTML, such as our TABSPACE element) 
         node.textContent = node.textContent.slice(0, offset) 
-          + SECRET_TAB_HOLDER.concat(`-${tabCount}`) + node.textContent.slice(offset, node.textContent.length);
-  
-         // this is done to sniff out all the previously-entered tabspaces that wouldn't show in innertext 
-        for (let i=1 ; i <= tabCount; i++) {
-          const lookupString = `<pre id=\"pre-${i}\" contenteditable=\"false\">    </pre>`;
-          event.target.innerHTML = event.target.innerHTML.replace(lookupString, SECRET_TAB_HOLDER.concat(`-${i}`));
-        }
-       
-      // all the placeholders replaced with stringifyed TABSPACE. This may look silly but is necessary bc innerHTML can't be sliced.
-        for (let j=1; j <= tabCount; j++) {
-          const lookupString = 
-            `<pre id=\"pre-${j}\" contenteditable=\"false\">    </pre>`;
-          event.target.innerHTML = event.target.innerHTML.replace(SECRET_TAB_HOLDER.concat(`-${j}`), lookupString);
-        }
+          + CURRENT_TAB_PLACEHOLDER + node.textContent.slice(offset, node.textContent.length);
+
+        // replace prevous current tabspace with a "default" tabspace
+        event.target.innerHTML = event.target.innerHTML.replace(TABSPACE, DEFAULT_TABSPACE);
+        // this placeholder replacement may seem like an extra step, but is necessary bc innerhtml can't be sliced like textContent
+        event.target.innerHTML = event.target.innerHTML.replace(CURRENT_TAB_PLACEHOLDER, TABSPACE);
 
         const content = event.target.innerHTML;
 
         // state-setter for persistance purposes
         updateContentArray(true, [{ ele: 'paragraph', content, tabCount }]);
-
-        // TODO move cursor to end of content
-        var range = document.createRange();
-        var sel = window.getSelection();
         
         // if tab is added to end of content, add an empty zero-width character so that cursor shows after tab.
         if (Array.from(paragraphDOM.childNodes).pop().nodeType !== 3) {
           paragraphDOM.innerHTML += '&#8203';
         } 
 
-        node = paragraphDOM.querySelector(`#pre-${tabCount}`);
+        // move cursor to end of current-tabspace
+        var range = document.createRange();
+        var sel = window.getSelection();
+        node = paragraphDOM.querySelector(`#current-tabspace`);
+      
         range.setStartAfter(node);
         range.setEndAfter(node);
-
-        console.log('NODE', node);
-
         range.collapse(false);
         
         sel.removeAllRanges()
@@ -87,6 +80,7 @@ const TextEditorParagraph: React.FC<TEParagraphProps> = ({ index, updateContentA
 
         break;
       }
+
       case 'Enter': {
         updateContentArray(false, [{ ele: 'paragraph', content: '', tabCount: 0 }]);
         break;
