@@ -10,9 +10,9 @@ const TextEditorParagraph: React.FC<TEParagraphProps> = ({ index, updateContentA
   useEffect(() => {
     const paragraphDOM = document.getElementById(`p-${index}`);
 
-    // component doesn't remember innerText when it remounts, have to pass it as a stateful prop and assign
+    // component doesn't remember innerHTML when it remounts, have to pass it as a stateful prop and assign
     // here.
-    paragraphDOM.innerText = content;
+    paragraphDOM.innerHTML = content;
     if (index === currentLine) {
       paragraphDOM.focus(); // focuses on component mount
     }
@@ -31,6 +31,13 @@ const TextEditorParagraph: React.FC<TEParagraphProps> = ({ index, updateContentA
       case 'Tab': {
         const selection = window.getSelection();
         let node = selection.focusNode;
+        let offset = selection.focusOffset;
+
+        // on double-tab, selection.focusNode becomes the outer <p> tag. In this case, reassign node to its #current-tab childNode
+        if (node.hasChildNodes()) {
+          node = Array.from(node.childNodes)[selection.focusOffset];
+          offset = 0;
+        }
         // **Not allowing tab if selection is multichar. Introduces new bugs that are difficult to resolve.
         if (selection.toString()) {
           return;
@@ -45,8 +52,7 @@ const TextEditorParagraph: React.FC<TEParagraphProps> = ({ index, updateContentA
         const DEFAULT_TABSPACE = `<pre contenteditable=\"false\">    </pre>`;
         // this is a placeholder. made ambiguous to prevent replacing user input
         const CURRENT_TAB_PLACEHOLDER = `SUPERSERCRETKEY`;
-        const offset = selection.focusOffset;
-
+     
         // insert the placeholder inside relevant node (textcontent gets split into nodes when it contains HTML, such as our TABSPACE element) 
         node.textContent = node.textContent.slice(0, offset) 
           + CURRENT_TAB_PLACEHOLDER + node.textContent.slice(offset, node.textContent.length);
@@ -61,8 +67,9 @@ const TextEditorParagraph: React.FC<TEParagraphProps> = ({ index, updateContentA
         // state-setter for persistance purposes
         updateContentArray(true, [{ ele: 'paragraph', content, tabCount }]);
         
+
         // if tab is added to end of content, add an empty zero-width character so that cursor shows after tab.
-        if (Array.from(paragraphDOM.childNodes).pop().nodeType !== 3) {
+        if (paragraphDOM.lastChild.nodeType !== 3) {
           paragraphDOM.innerHTML += '&#8203';
         } 
 
@@ -77,7 +84,7 @@ const TextEditorParagraph: React.FC<TEParagraphProps> = ({ index, updateContentA
         
         sel.removeAllRanges()
         sel.addRange(range)
-
+        console.log('END:', selection.focusNode);
         break;
       }
 
