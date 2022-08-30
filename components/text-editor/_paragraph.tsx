@@ -32,12 +32,40 @@ const TextEditorParagraph: React.FC<TEParagraphProps> = ({ index, updateContentA
         const selection = window.getSelection();
         let node = selection.focusNode;
         let offset = selection.focusOffset;
+        const childNodes = Array.from(node.childNodes);
 
         // on double-tab, selection.focusNode becomes the outer <p> tag. In this case, reassign node to its #current-tab childNode
         if (node.hasChildNodes()) {
-          node = Array.from(node.childNodes)[selection.focusOffset];
+
+          if (selection.focusOffset > 0) {
+            const tabNodes = [-1,0,1].map(index => childNodes[selection.focusOffset - index])
+                    .filter(childNode => childNode && childNode.nodeName === 'PRE');
+            if (tabNodes.length > 0) {
+              node = tabNodes.pop();
+            }
+          } else {
+            node = childNodes[selection.focusOffset];
+          }
           offset = 0;
         }
+        
+        if (node.nodeType === 3) {
+          if (node.textContent.length === 1 && node.textContent.charCodeAt(0) == 8203) {
+            node = node.previousSibling;
+          } else if (node.textContent.length === selection.focusOffset) {
+            if (node.nextSibling?.nodeName === 'PRE') {
+              node = node.nextSibling;
+              offset = 0;
+            }
+          } else if (selection.focusOffset === 0) {
+            if (node.previousSibling) {
+              node = node.previousSibling;
+            }
+            // offset should already be zero.
+          }
+
+        }
+
         // **Not allowing tab if selection is multichar. Introduces new bugs that are difficult to resolve.
         if (selection.toString()) {
           return;
@@ -58,7 +86,8 @@ const TextEditorParagraph: React.FC<TEParagraphProps> = ({ index, updateContentA
           + CURRENT_TAB_PLACEHOLDER + node.textContent.slice(offset, node.textContent.length);
 
         // replace prevous current tabspace with a "default" tabspace
-        event.target.innerHTML = event.target.innerHTML.replace(TABSPACE, DEFAULT_TABSPACE);
+        event.target.innerHTML = event.target.innerHTML.replaceAll('id=\"current-tabspace\"', '');
+
         // this placeholder replacement may seem like an extra step, but is necessary bc innerhtml can't be sliced like textContent
         event.target.innerHTML = event.target.innerHTML.replace(CURRENT_TAB_PLACEHOLDER, TABSPACE);
 
@@ -77,6 +106,9 @@ const TextEditorParagraph: React.FC<TEParagraphProps> = ({ index, updateContentA
         var range = document.createRange();
         var sel = window.getSelection();
         node = paragraphDOM.querySelector(`#current-tabspace`);
+        while (node.parentNode.nodeName === 'PRE') {
+          node = node.parentNode;
+        }
       
         range.setStartAfter(node);
         range.setEndAfter(node);
