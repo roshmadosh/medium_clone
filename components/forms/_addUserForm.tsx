@@ -46,7 +46,7 @@ export function AddUserForm({ addUserForm, setAddUserForm }: SignupPageType) {
           <option value="USER" onSelect={() => setAddUserForm({...addUserForm, role: "USER"})}>USER</option>
           <option value="ADMIN" onSelect={() => setAddUserForm({...addUserForm, role: "ADMIN"})}>ADMIN</option>
         </select>
-        {addUserResult.fetching ? <Spinner /> : <button className="btn-small" type="submit">Submit</button>}
+        {addUserResult.fetching ? <Spinner /> : <button type="submit">Submit</button>}
         
         <div className={`notif ${addUserResult.error ? 'error' : 'success'}`}>
           {addUserResult.error ? <p>Save unsuccessful.</p> : <p>{addUserResult.data && 'User added successfully!'}</p>}

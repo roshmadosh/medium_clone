@@ -1,0 +1,19 @@
+@use '/styles/variables/colors';
+@use '/styles/variables/font';
+
+@mixin button-defaults {
+  font-family: font.$ff-util;
+  padding: 1ch 2ch;
+  width: 10rem;
+  margin-right: 5ch;
+  cursor: pointer;
+  background: transparent;
+  border: .3rem solid colors.$white;
+  color: colors.$white;
+  font-weight: 700;
+  transition: all .25s;
+  &:hover {
+    background: colors.$highlight;
+    color: colors.$black;
+  }
+}

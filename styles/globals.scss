@@ -1,5 +1,6 @@
 
 @use './variables/colors';
+@use './variables/font';
 @use './mixins';
 @use './spinner.scss';
 @import url('https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap');
@@ -7,7 +8,7 @@
 
 html {
   font-size: 62.5%;
-  font-family: 'Libre Baskerville', serif;
+  font-family: font.$ff-content;
   background-color: colors.$black;
   color: colors.$white;
 }
@@ -94,11 +95,11 @@ pre {
   font-family: 'Libre Baskerville', serif;
 }
 
-.btn-small {
-  @include mixins.btn-dimensions(10rem);
-  padding: 0.5em 1em;
+form {
+  button {
+    @include mixins.button-defaults;
+  }
 }
-
 
 .add-story-button {
   background: colors.$white;
@@ -135,18 +136,7 @@ pre {
     margin-top: 5vh;
     width: 100%;
     button {
-      margin-right: 5ch;
-      padding: 1ch 2ch;
-      cursor: pointer;
-      background: transparent;
-      border: .3rem solid colors.$white;
-      color: colors.$white;
-      font-weight: 700;
-      transition: all .25s;
-      &:hover {
-        background: colors.$highlight;
-        color: colors.$black;
-      }
+      @include mixins.button-defaults;
     }
   }
 }
