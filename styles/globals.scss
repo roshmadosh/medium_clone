@@ -139,8 +139,9 @@ pre {
       padding: 1ch 2ch;
       cursor: pointer;
       background: transparent;
-      border: .2rem solid colors.$white;
+      border: .3rem solid colors.$white;
       color: colors.$white;
+      font-weight: 700;
       transition: all .25s;
       &:hover {
         background: colors.$highlight;

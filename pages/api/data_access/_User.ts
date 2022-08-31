@@ -1,9 +1,8 @@
-import { PrismaClient, Prisma } from '@prisma/client';
+import { Prisma } from '@prisma/client';
 import { hashGenerator } from 'utils/security/hashGenerator';
+import { prisma } from "./";
 
 type Role = 'ADMIN' | 'USER';
-
-const prisma = new PrismaClient();
 
 async function getUsers() {
   return await prisma.user.findMany()
