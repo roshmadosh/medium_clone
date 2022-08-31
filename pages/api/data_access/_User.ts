@@ -1,16 +1,16 @@
 import { Prisma } from '@prisma/client';
 import { hashGenerator } from 'utils/security/hashGenerator';
-import { prisma } from "./";
+import { prismaClient } from "./";
 
 type Role = 'ADMIN' | 'USER';
 
 async function getUsers() {
-  return await prisma.user.findMany()
+  return await prismaClient.user.findMany()
     .catch(async (e) => {
       console.error(e);
     })
     .finally(async () => {
-      await prisma.$disconnect();
+      await prismaClient.$disconnect();
     })  
 }
 
@@ -25,14 +25,14 @@ async function createUser(email: string, username: string, password: string, rol
 
 
   // Pass 'user' object into query
-  return await prisma.user.create({ data: user })
+  return await prismaClient.user.create({ data: user })
     .catch((e) => {
       // log error on server side
       console.error(e);
       // propogate error to GQL layer
       throw new Error("USER-GENERATED: Prisma failed to complete transaction. Details available in server logs.");
     }).finally(async() => {
-      await prisma.$disconnect();
+      await prismaClient.$disconnect();
     })
 }
 

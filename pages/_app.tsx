@@ -4,11 +4,13 @@ import Layout from 'components/layout';
 import Head from 'next/head';
 import { createClient, Provider } from 'urql';
 
+
 export const GQL_PATH = '/api/graphql';
 
 const client = createClient({
   url: GQL_PATH,
 });
+
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
