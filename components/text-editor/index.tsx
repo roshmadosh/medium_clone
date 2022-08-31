@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { NewStoryChildren } from "pages/new-story";
 import dynamic from "next/dynamic";
+import { useMutation } from "urql";
 
 export type TextEditorChildren = {
   title: {
@@ -50,10 +51,6 @@ export const TextEditor: React.FC<NewStoryChildren['textEditor']['propTypes']> =
         )
       }
     })}
-    <div className="actions">
-      <button>Cancel</button>
-      <button type="submit">Submit</button>
-    </div>
   </div>
   )
 }

@@ -9,6 +9,7 @@ const modelTypeDefs = `
   }
 
   type Post {
+    id: ID!
     createdAt: String!
     title: String!
     content: String!

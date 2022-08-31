@@ -95,9 +95,16 @@ pre {
   font-family: 'Libre Baskerville', serif;
 }
 
-form {
+.page {
   button {
     @include mixins.button-defaults;
+  }
+}
+
+#newstory-page {
+  > .actions {
+    margin-top: 5vh;
+    width: 100%;
   }
 }
 
@@ -131,13 +138,6 @@ form {
   }
   .visible {
     visibility: visible !important;
-  }
-  > .actions {
-    margin-top: 5vh;
-    width: 100%;
-    button {
-      @include mixins.button-defaults;
-    }
   }
 }
 

@@ -48,6 +48,7 @@ export function AddUserForm({ addUserForm, setAddUserForm }: SignupPageType) {
         </select>
         {addUserResult.fetching ? <Spinner /> : <button type="submit">Submit</button>}
         
+        {/* TODO style notif class */}
         <div className={`notif ${addUserResult.error ? 'error' : 'success'}`}>
           {addUserResult.error ? <p>Save unsuccessful.</p> : <p>{addUserResult.data && 'User added successfully!'}</p>}
         </div>

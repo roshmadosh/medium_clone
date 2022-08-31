@@ -4,7 +4,7 @@ const typeDefs = `
   input PostInput {
     email: String!
     title: String!
-    content: String!
+    content: [String!]!
   }
 
   type Mutation {
@@ -15,7 +15,8 @@ const typeDefs = `
 const resolvers = {
   Mutation: {
     async createPost(parent, args, context) {
-      const { email, title, content } = args;
+      const { email, title, content } = args.input;
+      console.log("ARGS:", args);
       return await postDAO.createPost(email, title, content);
     }
   }

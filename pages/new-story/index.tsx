@@ -1,8 +1,9 @@
 import { NextPage } from "next";
 import { useState } from "react";
-import { StateSetters } from 'utils/types';
+import { useMutation } from "urql";
 import uuid from 'react-uuid';
 import { TextEditor } from "components/text-editor";
+import { Spinner } from "components/loaders";
 
 export type NewStoryChildren = {
   textEditor: {
@@ -28,12 +29,34 @@ type EditorContent = {
 
 type UpdateContentArgs = [id: string, update: boolean, contents: EditorContent[]];
 
-
+const AddPost = `
+mutation ($input: PostInput!) {
+  createPost(input: $input) {
+    id
+  }
+}
+`
 
 // --[START]-- //
 const NewStory: NextPage = () => {
   const [contentArray, setContentArray] = useState<NewStoryState['contentArray']>([{ id: uuid(), ele: 'title', content: '' }]);
   const [currentLine, setCurrentLine] = useState(0);
+  const [addPostResult, addPost] = useMutation(AddPost);
+
+  const onClickSubmit = async () => {
+    const postInput = {
+      email: 'random@email.com',
+      title: contentArray[0].content,
+      content: contentArray.slice(1).map(paragraph => paragraph.content),
+    };
+
+    await addPost({ input: postInput }).then(result => {
+      if (result.error) {
+        console.error(result.error);
+      } 
+    });
+  }
+
   // Wrapper function to state-setter.
   // Use bind method to create from it a new function that's specific to the use-case.
   const updateContentArray = (...args: UpdateContentArgs) => {
@@ -49,11 +72,20 @@ const NewStory: NextPage = () => {
   }
 
   return (
-    <TextEditor
-      currentLine={currentLine} 
-      contentArray={contentArray}
-      updateContentArray={updateContentArray}
-    />
+    <div className="page" id="newstory-page">
+      <TextEditor
+        currentLine={currentLine} 
+        contentArray={contentArray}
+        updateContentArray={updateContentArray}
+      />
+      <div className="actions">
+        <button>Cancel</button>
+        {addPostResult.fetching ? <Spinner /> : <button type="submit" onClick={onClickSubmit}>Submit</button>}
+      </div>
+      <div className={`notif ${addPostResult.error ? 'error' : 'success'}`}>
+          {addPostResult.error ? <p>Save unsuccessful.</p> : <p>{addPostResult.data && 'Post added successfully!'}</p>}
+        </div>
+    </div>
   )
 }
 
