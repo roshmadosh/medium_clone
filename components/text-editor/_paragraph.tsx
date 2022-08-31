@@ -36,28 +36,31 @@ const TextEditorParagraph: React.FC<TEParagraphProps> = ({ index, updateContentA
 
         // on double-tab, selection.focusNode becomes the outer <p> tag. In this case, reassign node to its #current-tab childNode
         if (node.hasChildNodes()) {
-
+          // in all cases where focusNode is <p> AND tab isn't at the very start
           if (selection.focusOffset > 0) {
+            // check if child nodes before, at, or after focusOffset is a tab node. If so, assign node to that.
             const tabNodes = [-1,0,1].map(index => childNodes[selection.focusOffset - index])
                     .filter(childNode => childNode && childNode.nodeName === 'PRE');
             if (tabNodes.length > 0) {
               node = tabNodes.pop();
             }
-          } else {
+          } else { // this is needed when making the first tab at the start of the paragraph
             node = childNodes[selection.focusOffset];
           }
           offset = 0;
         }
         
+        // for when focusNode is a string
         if (node.nodeType === 3) {
+          // if focusNode is the zero-width char (which is used for controlling cursor position)
           if (node.textContent.length === 1 && node.textContent.charCodeAt(0) == 8203) {
             node = node.previousSibling;
-          } else if (node.textContent.length === selection.focusOffset) {
+          } else if (node.textContent.length === selection.focusOffset) { //when the string preceding current tab becomes the focusNode
             if (node.nextSibling?.nodeName === 'PRE') {
               node = node.nextSibling;
               offset = 0;
             }
-          } else if (selection.focusOffset === 0) {
+          } else if (selection.focusOffset === 0) { // when the string following current tab is the focus node
             if (node.previousSibling) {
               node = node.previousSibling;
             }
@@ -106,6 +109,8 @@ const TextEditorParagraph: React.FC<TEParagraphProps> = ({ index, updateContentA
         var range = document.createRange();
         var sel = window.getSelection();
         node = paragraphDOM.querySelector(`#current-tabspace`);
+
+        // all tabs after the first tab of multitabs are nested. this assigns node to the parent tabNode
         while (node.parentNode.nodeName === 'PRE') {
           node = node.parentNode;
         }
@@ -114,9 +119,9 @@ const TextEditorParagraph: React.FC<TEParagraphProps> = ({ index, updateContentA
         range.setEndAfter(node);
         range.collapse(false);
         
-        sel.removeAllRanges()
-        sel.addRange(range)
-        console.log('END:', selection.focusNode);
+        sel.removeAllRanges();
+        sel.addRange(range);
+      
         break;
       }
 

@@ -73,6 +73,10 @@ const NewStory: NextPage = () => {
           )
         }
       })}
+      <div className="actions">
+        <button>Cancel</button>
+        <button type="submit">Submit</button>
+      </div>
     </div>
   )
 }
