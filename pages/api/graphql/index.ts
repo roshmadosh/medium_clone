@@ -1,4 +1,5 @@
 import { createServer } from '@graphql-yoga/node'
+import { PostSchema } from './_Post'
 import { UserSchema } from './_User'
 
 
@@ -34,9 +35,13 @@ const server = createServer({
   schema: {
     typeDefs: [
       modelTypeDefs,
-      UserSchema.typeDefs
+      UserSchema.typeDefs,
+      PostSchema.typeDefs
     ],
-    resolvers: UserSchema.resolvers,
+    resolvers: [
+      UserSchema.resolvers,
+      PostSchema.resolvers
+    ]
   },
   endpoint: '/api/graphql',
   // graphiql: false // uncomment to disable GraphiQL

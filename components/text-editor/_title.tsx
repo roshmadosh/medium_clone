@@ -1,10 +1,8 @@
 import { useEffect, useState } from "react";
 import { keyDownHandler } from "utils/eventHandlers"
-import { NewStoryChildren } from "pages/new-story";
+import { TextEditorChildren } from "./";
 
-type TextEditorProps = NewStoryChildren['title'];
-
-const TextEditorTitle: React.FC<TextEditorProps> = ({ updateContentArray }) => {
+const TextEditorTitle: React.FC<TextEditorChildren['title']['propTypes']> = ({ updateContentArray }) => {
   //todo: make editor fields a custom hook with boolean "blank" state
   const [titleBlank, setTitleBlank] = useState(true);
 

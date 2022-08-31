@@ -1,11 +1,8 @@
 import { KeyboardEvent, useEffect } from "react";
 import { keyDownHandler } from "utils/eventHandlers"
-import { NewStoryChildren } from "pages/new-story";
+import { TextEditorChildren } from "./";
 
-
-type TEParagraphProps = NewStoryChildren['paragraph'];
-
-const TextEditorParagraph: React.FC<TEParagraphProps> = ({ index, updateContentArray, content, tabCount, currentLine }) => {
+const TextEditorParagraph: React.FC<TextEditorChildren['paragraph']['propTypes']> = ({ index, updateContentArray, content, tabCount, currentLine }) => {
 
   useEffect(() => {
     const paragraphDOM = document.getElementById(`p-${index}`);
