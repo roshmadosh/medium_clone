@@ -1,6 +1,21 @@
 import { Prisma } from "@prisma/client";
 import { prismaClient } from "./";
-import type { EditorContent } from "pages/new-story"
+import type { EditorContent } from "pages/new-story";
+
+async function getPostsByUserId(authorId: number) {
+  return await prismaClient.post.findMany({
+    include: {
+      editorContent: true
+    },
+    where: {
+      authorId
+    }
+  }).catch(async e => {
+    console.error(e);
+  }).finally(async () => {
+    prismaClient.$disconnect();
+  })
+}
 
 async function createPost(email: string, editorContent: EditorContent[]) {
   let post: Prisma.PostCreateInput = {
@@ -27,5 +42,6 @@ async function createPost(email: string, editorContent: EditorContent[]) {
 }
 
 export const postDAO = {
-  createPost
+  createPost,
+  getPostsByUserId,
 }

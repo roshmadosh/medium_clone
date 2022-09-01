@@ -8,8 +8,7 @@ async function getUsers() {
   return await prismaClient.user.findMany()
     .catch(async (e) => {
       console.error(e);
-    })
-    .finally(async () => {
+    }).finally(async () => {
       await prismaClient.$disconnect();
     })  
 }

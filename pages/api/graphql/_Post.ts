@@ -19,7 +19,10 @@ const typeDefs = `
   input PostInput {
     email: String!
     editorContent: [EditorContentInput!]!
-    
+  }
+
+  type Query {
+    getPostsByUserId(authorId: Int!): [Post]
   }
 
   type Mutation {
@@ -28,6 +31,11 @@ const typeDefs = `
 `;
 
 const resolvers = {
+  Query: {
+    async getPostsByUserId(parent, args, context) {
+      return await postDAO.getPostsByUserId(args.authorId);
+    }
+  },
   Mutation: {
     async createPost(parent, args, context) {
       const { email, editorContent } = args.input;
