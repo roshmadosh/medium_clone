@@ -2,7 +2,7 @@ import { KeyboardEvent, useEffect } from "react";
 import { keyDownHandler } from "utils/eventHandlers"
 import { TextEditorChildren } from "./";
 
-const TextEditorParagraph: React.FC<TextEditorChildren['paragraph']['propTypes']> = ({ index, updateContentArray, content, tabCount, currentLine }) => {
+const TextEditorParagraph: React.FC<TextEditorChildren['paragraph']['propTypes']> = ({ index, updateContentArray, content, currentLine }) => {
 
   useEffect(() => {
     const paragraphDOM = document.getElementById(`p-${index}`);
@@ -46,12 +46,12 @@ const TextEditorParagraph: React.FC<TextEditorChildren['paragraph']['propTypes']
           }
           offset = 0;
         }
-        
         // for when focusNode is a string
         if (node.nodeType === 3) {
           // if focusNode is the zero-width char (which is used for controlling cursor position)
           if (node.textContent.length === 1 && node.textContent.charCodeAt(0) == 8203) {
-            node = node.previousSibling;
+            const currentNode = node;
+            node = node.previousSibling ?? currentNode; // only update the node if previousSibling exists
           } else if (node.textContent.length === selection.focusOffset) { //when the string preceding current tab becomes the focusNode
             if (node.nextSibling?.nodeName === 'PRE') {
               node = node.nextSibling;
@@ -70,9 +70,6 @@ const TextEditorParagraph: React.FC<TextEditorChildren['paragraph']['propTypes']
         if (selection.toString()) {
           return;
         }
-     
-        // count the existing tag elements, and include current tag being added
-        tabCount = Array.from(paragraphDOM.innerHTML.matchAll(/<pre/g)).length + 1;
   
         // to distinguish current tabspace from previous ones
         const TABSPACE = `<pre id=\"current-tabspace\" contenteditable=\"false\">    </pre>`;
@@ -94,7 +91,7 @@ const TextEditorParagraph: React.FC<TextEditorChildren['paragraph']['propTypes']
         const content = event.target.innerHTML;
 
         // state-setter for persistance purposes
-        updateContentArray(true, [{ ele: 'paragraph', content, tabCount }]);
+        updateContentArray(true, [{ ele: 'paragraph', content }]);
         
 
         // if tab is added to end of content, add an empty zero-width character so that cursor shows after tab.
@@ -123,14 +120,14 @@ const TextEditorParagraph: React.FC<TextEditorChildren['paragraph']['propTypes']
       }
 
       case 'Enter': {
-        updateContentArray(false, [{ ele: 'paragraph', content: '', tabCount: 0 }]);
+        updateContentArray(false, [{ ele: 'paragraph', content: '' }]);
         break;
       }
       case 'Shift': {
         return;
       }
       default: { // for all other keys
-        updateContentArray(true, [{ ele: 'paragraph', content: event.target.innerText, tabCount }]); 
+        updateContentArray(true, [{ ele: 'paragraph', content: event.target.innerText }]); 
       }
     }
   }

@@ -4,6 +4,7 @@ import { useMutation } from "urql";
 import uuid from 'react-uuid';
 import { TextEditor } from "components/text-editor";
 import { Spinner } from "components/loaders";
+import { EditorContentType } from "@prisma/client";
 
 export type NewStoryChildren = {
   textEditor: {
@@ -17,14 +18,13 @@ export type NewStoryChildren = {
   }
 }
 
-type NewStoryState = {
-  contentArray: ({ id: string } & EditorContent)[]
+export type EditorContent = {
+  ele: EditorContentType,
+  content: string,
 }
 
-type EditorContent = {
-  ele: 'title' | 'subheader' | 'paragraph',
-  content: string,
-  tabCount?: number
+type NewStoryState = {
+  contentArray: ({ id: string } & EditorContent)[]
 }
 
 type UpdateContentArgs = [id: string, update: boolean, contents: EditorContent[]];
@@ -39,15 +39,15 @@ mutation ($input: PostInput!) {
 
 // --[START]-- //
 const NewStory: NextPage = () => {
-  const [contentArray, setContentArray] = useState<NewStoryState['contentArray']>([{ id: uuid(), ele: 'title', content: '' }]);
+  const [contentArray, setContentArray] = useState<NewStoryState['contentArray']>([{ id: uuid(), ele: "title", content: '' }]);
   const [currentLine, setCurrentLine] = useState(0);
   const [addPostResult, addPost] = useMutation(AddPost);
 
   const onClickSubmit = async () => {
+    const withoutId = contentArray.map(line => ({ ele: line.ele, content: line.content}))
     const postInput = {
       email: 'random@email.com',
-      title: contentArray[0].content,
-      content: contentArray.slice(1).map(paragraph => paragraph.content),
+      editorContent: withoutId,
     };
 
     await addPost({ input: postInput }).then(result => {

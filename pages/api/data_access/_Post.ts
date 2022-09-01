@@ -1,15 +1,19 @@
-import { prisma, Prisma } from "@prisma/client";
+import { Prisma } from "@prisma/client";
 import { prismaClient } from "./";
+import type { EditorContent } from "pages/new-story"
 
-async function createPost(email: string, title: string, content: string) {
+async function createPost(email: string, editorContent: EditorContent[]) {
   let post: Prisma.PostCreateInput = {
     author: {
       connect: {
         email
       }
     },
-    title,
-    content
+    editorContent: {
+     create: [
+      ...editorContent
+     ]
+    }
   }
 
   return await prismaClient.post.create({ data: post })

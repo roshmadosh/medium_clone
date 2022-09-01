@@ -38,17 +38,26 @@ model Comment {
   replies Comment[] @relation("replies")
 }
 
-model Post {
+model EditorContent {
   id Int @id @default(autoincrement())
+  ele EditorContentType
+  content String
+  postId Int
+  post Post @relation(fields: [postId], references: [id])
+}
+
+
+model Post { 
+  id Int @id @default(autoincrement()) 
   createdAt DateTime @default(now())
-  title String
-  content String[]
+  editorContent EditorContent[] 
   authorId Int
   author User @relation(fields: [authorId], references: [id])
   comments Comment[]
   categoryId Int?
   category Category? @relation(fields: [categoryId], references: [id])
 }
+
 
 model Category {
   id Int @id @default(autoincrement())
@@ -59,4 +68,10 @@ model Category {
 enum Role {
   USER
   ADMIN
+}
+
+enum EditorContentType {
+  title
+  subheader
+  paragraph
 }

@@ -1,8 +1,12 @@
 import { NextPage } from "next";
 
 const Home: NextPage = () => {
+  
   return(
-    <h1>HOme</h1>
+    <div className="page" id="home-page">
+      <h1>My posts</h1>
+
+    </div>
   )
 }
 

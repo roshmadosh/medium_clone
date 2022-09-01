@@ -1,10 +1,25 @@
 import { postDAO } from "../data_access";
 
 const typeDefs = `
+
+  type EditorContent {
+    ele: String!
+    content: String!
+  }
+
+  type Post {
+    email: String!
+    editorContent: [EditorContent!]!
+  }
+  
+  input EditorContentInput {
+    ele: String!
+    content: String!
+  }
   input PostInput {
     email: String!
-    title: String!
-    content: [String!]!
+    editorContent: [EditorContentInput!]!
+    
   }
 
   type Mutation {
@@ -15,9 +30,8 @@ const typeDefs = `
 const resolvers = {
   Mutation: {
     async createPost(parent, args, context) {
-      const { email, title, content } = args.input;
-      console.log("ARGS:", args);
-      return await postDAO.createPost(email, title, content);
+      const { email, editorContent } = args.input;
+      return await postDAO.createPost(email, editorContent);
     }
   }
 }
