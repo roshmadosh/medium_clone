@@ -141,8 +141,21 @@ pre {
   }
 }
 
+#home-page {
+  #posts {
+    margin-top: 3.2rem;
+  }
+}
 
-
+.post-card {
+  padding: 2em;
+  border: .2rem solid colors.$white;
+  border-radius: .5rem;
+}
+.card-detail {
+  display: block;
+  line-height: 2em;
+}
 
 
 // @media (prefers-color-scheme: dark) {

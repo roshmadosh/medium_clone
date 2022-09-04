@@ -1,17 +1,6 @@
 import { postDAO } from "../data_access";
 
 const typeDefs = `
-
-  type EditorContent {
-    ele: String!
-    content: String!
-  }
-
-  type Post {
-    email: String!
-    editorContent: [EditorContent!]!
-  }
-  
   input EditorContentInput {
     ele: String!
     content: String!

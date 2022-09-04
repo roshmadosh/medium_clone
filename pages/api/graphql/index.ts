@@ -8,12 +8,15 @@ const modelTypeDefs = `
     name: String!
   }
 
-  type Post {
-    id: ID!
-    createdAt: String!
-    title: String!
+  type EditorContent {
+    ele: String!
     content: String!
-    category: Category
+  }
+
+  type Post {
+    createdAt: String!
+    author: User!
+    editorContent: [EditorContent!]!
   }
 
   type Comment {

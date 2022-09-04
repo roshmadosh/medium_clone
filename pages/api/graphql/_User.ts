@@ -2,6 +2,10 @@ import { userDAO } from "../data_access";
 
 // typeDefs declare what fields are exposed to GQL clients
 const typeDefs = `
+  type User {
+    email: String!
+    username: String!
+  }
   input UserInput {
     email: String!
     username: String!

@@ -1,10 +1,16 @@
 import { NextPage } from "next";
 import { useQuery } from 'urql';
 import { Spinner } from "components/loaders";
+import { PostCard } from "components/card";
 
-const TodosQuery = `
+const PostsQuery = `
   query($authorId: Int!) {
     getPostsByUserId(authorId: $authorId) {
+      createdAt
+    	author {
+        email
+        username
+      }
       editorContent {
         content
       }
@@ -14,7 +20,7 @@ const TodosQuery = `
 
 const Home: NextPage = () => {
   const [results, queryPosts] = useQuery({
-    query: TodosQuery,
+    query: PostsQuery,
     variables: {
       authorId: 36
     },
@@ -35,9 +41,14 @@ const Home: NextPage = () => {
     return(
       <div className="page" id="home-page">
         <h1>My posts</h1>
-        <ul>
+        <ul  id="posts">
           {posts.map((post, idx) => (
-            <li key={idx}>{post.editorContent[0].content}</li>
+            <PostCard 
+              title={post.editorContent[0].content}
+              datePosted={new Date(+post.createdAt).toDateString()}
+              author={post.author.username}
+              key={idx}
+            />
           ))}
         </ul>
       </div>

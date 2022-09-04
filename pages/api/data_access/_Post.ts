@@ -5,6 +5,7 @@ import type { EditorContent } from "pages/new-story";
 async function getPostsByUserId(authorId: number) {
   return await prismaClient.post.findMany({
     include: {
+      author: true,
       editorContent: true
     },
     where: {
