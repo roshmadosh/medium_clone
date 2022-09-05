@@ -4,6 +4,7 @@ import { useMutation } from "urql";
 import uuid from 'react-uuid';
 import { TextEditor } from "components/text-editor";
 import { Spinner } from "components/loaders";
+import { PostImage } from "components/post-image";
 import { EditorContentType } from "@prisma/client";
 
 export type NewStoryChildren = {
@@ -73,6 +74,7 @@ const NewStory: NextPage = () => {
 
   return (
     <div className="page" id="newstory-page">
+      <PostImage />
       <TextEditor
         currentLine={currentLine} 
         contentArray={contentArray}
