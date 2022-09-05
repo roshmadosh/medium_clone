@@ -48,6 +48,7 @@ const Home: NextPage = () => {
               datePosted={new Date(+post.createdAt).toDateString()}
               author={post.author.username}
               key={idx}
+              imageUrl={"/api/images/xyz.jpg"}
             />
           ))}
         </ul>

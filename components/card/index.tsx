@@ -1,11 +1,18 @@
-export const PostCard = ({ title, author, datePosted }) => {
+import path from "path";
+
+export const PostCard = ({ title, author, datePosted, imageUrl }) => {
+  const fullImageUrl = "C:/Users/hiros/Desktop/medium_images/xy/xyz.jpg"
   return (
     <div className="post-card">
-      <h2 className="post-card-title"><a>{title}</a></h2>
-      <p className="post-card-details">
-        <span className="card-detail">{author}</span>
-        <span className="card-detail">{datePosted}</span>
-      </p>
+      <div className="post-card-details">
+        <h2 className="post-card-title"><a>{title}</a></h2>
+        <p className="card-detail">{author}</p>
+        <p className="card-detail">{datePosted}</p>
+      </div>
+      <div className="post-card-image">
+        <img src={imageUrl} alt="post image" />
+      </div>
+
     </div>
   )
 }
