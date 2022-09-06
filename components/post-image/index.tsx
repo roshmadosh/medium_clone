@@ -20,7 +20,7 @@ export const PostImage = () => {
           <Image 
             src={imageSrc} 
             layout="fill" 
-            objectFit='contain' 
+            objectFit="contain" 
             alt="post-image"
           />}
       </div>

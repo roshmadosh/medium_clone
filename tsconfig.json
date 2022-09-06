@@ -1,8 +1,8 @@
 {
   "compilerOptions": {
-    "baseUrl": ".",
+    "baseUrl": "./",
     "paths": {
-      // "@components/*": ["pages/components/*"]
+      "@data": ["data_access"]
     },
     "noImplicitAny": false,
     "target": "es5",

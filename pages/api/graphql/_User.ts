@@ -1,4 +1,4 @@
-import { userDAO } from "../data_access";
+import { userDAO } from "@data";
 
 // typeDefs declare what fields are exposed to GQL clients
 const typeDefs = `

@@ -1,4 +1,4 @@
-import path from "path";
+import Image from "next/image"
 
 export const PostCard = ({ title, author, datePosted, imageUrl }) => {
   const fullImageUrl = "C:/Users/hiros/Desktop/medium_images/xy/xyz.jpg"
@@ -10,7 +10,12 @@ export const PostCard = ({ title, author, datePosted, imageUrl }) => {
         <p className="card-detail">{datePosted}</p>
       </div>
       <div className="post-card-image">
-        <img src={imageUrl} alt="post image" />
+        <Image 
+            src={imageUrl} 
+            layout="fill" 
+            objectFit="cover" 
+            alt="post image"
+          />
       </div>
 
     </div>

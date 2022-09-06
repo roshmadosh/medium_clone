@@ -9,7 +9,7 @@
 html {
   font-size: 62.5%;
   font-family: font.$ff-content;
-  background-color: colors.$black;
+  background-color: colors.$less-dark;
   color: colors.$white;
 }
 
@@ -107,7 +107,6 @@ canvas {
 
 #newstory-page {
   > .actions {
-    margin-top: 5vh;
     width: 100%;
   }
 }
@@ -123,6 +122,7 @@ canvas {
 }
 
 .text-editor {
+  margin: 3.2rem 0;
   .field {
     position: relative;
     > .placeholder {
@@ -152,9 +152,17 @@ canvas {
 }
 
 .post-card {
-  padding: 2em;
-  border: .2rem solid colors.$white;
-  border-radius: .5rem;
+  background: colors.$dark;
+  border: .1rem solid colors.$dark;
+  box-shadow: .5rem .25rem .5rem colors.$black;
+  display: grid;
+  grid-template-columns: 3fr 2fr;
+  .post-card-details {
+    padding: 2em;
+  }
+  .post-card-image {
+    position: relative;
+  }
 }
 .card-detail {
   line-height: 2em;

@@ -1,7 +1,5 @@
-import { useState } from "react";
 import { NewStoryChildren } from "pages/new-story";
 import dynamic from "next/dynamic";
-import { useMutation } from "urql";
 
 export type TextEditorChildren = {
   title: {
@@ -14,7 +12,6 @@ export type TextEditorChildren = {
       index: number,
       content: string,
       currentLine: NewStoryChildren['textEditor']['propTypes']['currentLine'],
-      tabCount: number,
       updateContentArray: (...args: UpdateContentArgs) => void,
     }
   },
@@ -44,7 +41,6 @@ export const TextEditor: React.FC<NewStoryChildren['textEditor']['propTypes']> =
               content={item.content}
               currentLine={currentLine}
               key={item.id}
-              tabCount={item.tabCount}
               updateContentArray={updateContentArray.bind(null, item.id)} 
             />
           </>

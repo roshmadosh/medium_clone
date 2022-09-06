@@ -1,5 +1,5 @@
 import { Prisma } from "@prisma/client";
-import { prismaClient } from "./";
+import { prismaClient } from ".";
 import type { EditorContent } from "pages/new-story";
 
 async function getPostsByUserId(authorId: number) {

@@ -1,6 +1,6 @@
 import { Prisma } from '@prisma/client';
 import { hashGenerator } from 'utils/security/hashGenerator';
-import { prismaClient } from "./";
+import { prismaClient } from ".";
 
 type Role = 'ADMIN' | 'USER';
 

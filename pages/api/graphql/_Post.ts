@@ -1,4 +1,4 @@
-import { postDAO } from "../data_access";
+import { postDAO } from "@data";
 
 const typeDefs = `
   input EditorContentInput {

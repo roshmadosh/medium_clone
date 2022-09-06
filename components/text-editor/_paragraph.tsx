@@ -1,4 +1,4 @@
-import { KeyboardEvent, useEffect } from "react";
+import { useEffect } from "react";
 import { keyDownHandler } from "utils/eventHandlers"
 import { TextEditorChildren } from "./";
 
