@@ -71,8 +71,8 @@ const TextEditorParagraph: React.FC<TextEditorChildren['paragraph']['propTypes']
           return;
         }
   
-        // to distinguish current tabspace from previous ones
-        const TABSPACE = `<pre id=\"current-tabspace\" contenteditable=\"false\">    </pre>`;
+        // to distinguish current tabspace from previous ones. 8 spaces.
+        const TABSPACE = `<pre id=\"current-tabspace\" contenteditable=\"false\">        </pre>`;
         // previous tabspaces
         const DEFAULT_TABSPACE = `<pre contenteditable=\"false\">    </pre>`;
         // this is a placeholder. made ambiguous to prevent replacing user input
@@ -118,7 +118,6 @@ const TextEditorParagraph: React.FC<TextEditorChildren['paragraph']['propTypes']
       
         break;
       }
-
       case 'Enter': {
         updateContentArray(false, [{ ele: 'paragraph', content: '' }]);
         break;

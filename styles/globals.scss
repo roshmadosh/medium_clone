@@ -15,9 +15,9 @@ html {
 
 body {
   width: 100%;
-  max-width: 1260px;
+  max-width: 1030px;
   margin: auto;
-  font-size: 1.6rem;
+  font-size: 2rem;
 }
 
 header {
@@ -33,10 +33,10 @@ header {
     width: 25%;
     > ul {
       margin: auto;
-      @include mixins.flex('flex-end');
+      @include mixins.flex('space-between');
       > li {
         cursor: pointer;
-        margin: 1em 0 1em 3em;
+        margin: 1em 0;
       }
     }
   }
