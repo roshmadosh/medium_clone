@@ -54,14 +54,13 @@ main {
     padding: 2em 1em;
     grid-column: 1 / 3;
     background: colors.$dark;
-    > fieldset {
-      border: 0;
-    }
-    #fieldset-content {
+
+    #add-user-content {
       @include mixins.flex-column;
-      width: 50%;
+      margin-bottom: 1.5em;
       > input, select {
         margin-bottom: 1.5em;
+        padding: .5rem;
       }
     }
   }

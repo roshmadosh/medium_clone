@@ -4,6 +4,7 @@ Stack:
 - **NextJS**
 - **urql** (client-side GQL)
 - **graphql-yoga** (serverside GQL)
-- **prisma** (ORM)
+- **Prisma** (ORM)
+- **PostgreSQL**
 - **Docker**
 - will try to deploy as containers, either in AWS or Azure.
