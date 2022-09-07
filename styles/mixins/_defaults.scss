@@ -16,3 +16,8 @@
     color: colors.$black;
   }
 }
+
+@mixin box-shadow {
+  border: 1rem solid colors.$dark;
+  box-shadow: .5rem .4rem .5rem colors.$darker;
+}

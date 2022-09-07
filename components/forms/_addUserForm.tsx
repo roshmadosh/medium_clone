@@ -32,14 +32,14 @@ export function AddUserForm({ addUserForm, setAddUserForm }: SignupPageType) {
   return (
     <form action="" method="post" autoComplete="off" onSubmit={onSubmitForm}>
       <div id="add-user-content">
-        <label htmlFor="email">Email: </label>
+        <label htmlFor="email">Email</label>
         <input type="email" id="email" required onChange={(e) => setAddUserForm({...addUserForm, email: e.target.value })} />
-        <label htmlFor="username">Username: </label>
+        <label htmlFor="username">Username</label>
         <input type="text" id="username" required onChange={(e) => setAddUserForm({...addUserForm, username: e.target.value })}/>
-        <label htmlFor="password">Password: </label>
+        <label htmlFor="password">Password</label>
         <input type="password" id="password" required onChange={(e) => setAddUserForm({...addUserForm, password: e.target.value })}/>
 
-        <label htmlFor="role"></label>
+        <label htmlFor="role">Role</label>
         <select name="role" id="role">
           <option value="USER" onSelect={() => setAddUserForm({...addUserForm, role: "USER"})}>USER</option>
           <option value="ADMIN" onSelect={() => setAddUserForm({...addUserForm, role: "ADMIN"})}>ADMIN</option>
