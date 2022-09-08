@@ -1,7 +1,6 @@
 import Image from "next/image"
 
 export const PostCard = ({ title, author, datePosted, imageUrl }) => {
-  const fullImageUrl = "C:/Users/hiros/Desktop/medium_images/xy/xyz.jpg"
   return (
     <div className="post-card">
       <div className="post-card-details">

@@ -11,13 +11,12 @@ const client = createClient({
   url: GQL_PATH,
 });
 
-
 function MyApp({ Component, pageProps }: AppProps) {
   return (
     <Layout>
       <Head>
-        <title>&quot;The Office&quot; Poll</title>
-        <meta name="description" content="Vote for your favorite character from 'The Office'." />
+        <title>A Medium Clone</title>
+        <meta name="description" content="A Medium clone" />
       </Head>
       <main>
         <Provider value={client}>
